@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styleVT.css" />
+    <title>VELHO TESTAMENTO</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="estante">
+            <div id="pentateuco">
+                <div class="box" data-draggable-id="Gn"></div>
+                <div class="box" data-draggable-id="Ex"></div>
+                <div class="box" data-draggable-id="Nm"></div>
+                <div class="box" data-draggable-id="Lv"></div>
+                <div class="box" data-draggable-id="Dt"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+            </div>
+            <div id="historicos">
+                <div class="box" data-draggable-id="Js"></div>
+                <div class="box" data-draggable-id="Jz"></div>
+                <div class="box" data-draggable-id="Rt"></div>
+                <div class="box" data-draggable-id="1Sm"></div>
+                <div class="box" data-draggable-id="2Sm"></div>
+                <div class="box" data-draggable-id="1Rs"></div>
+                <div class="box" data-draggable-id="2Rs"></div>
+                <div class="box" data-draggable-id="1Cr"></div>
+                <div class="box" data-draggable-id="2Cr"></div>
+                <div class="box" data-draggable-id="Es"></div>
+                <div class="box" data-draggable-id="Ne"></div>
+                <div class="box" data-draggable-id="Et"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+            </div>
+            <div id="poeticos">
+                <div class="box" data-draggable-id="Jó"></div>
+                <div class="box" data-draggable-id="Sl"></div>
+                <div class="box" data-draggable-id="Pr"></div>
+                <div class="box" data-draggable-id="Ec"></div>
+                <div class="box" data-draggable-id="Ct"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+            </div>
+            <div id="pmaiores">
+                <div class="box" data-draggable-id="Is"></div>
+                <div class="box" data-draggable-id="Jr"></div>
+                <div class="box" data-draggable-id="Lm"></div>
+                <div class="box" data-draggable-id="Ez"></div>
+                <div class="box" data-draggable-id="Dn"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+            </div>
+            <div id="pmenores">
+                <div class="box" data-draggable-id="Os"></div>
+                <div class="box" data-draggable-id="Dn"></div>
+                <div class="box" data-draggable-id="Am"></div>
+                <div class="box" data-draggable-id="Ob"></div>
+                <div class="box" data-draggable-id="Jn"></div>
+                <div class="box" data-draggable-id="Mq"></div>
+                <div class="box" data-draggable-id="Na"></div>
+                <div class="box" data-draggable-id="Hab"></div>
+                <div class="box" data-draggable-id="Sf"></div>
+                <div class="box" data-draggable-id="Ag"></div>
+                <div class="box" data-draggable-id="Zc"></div>
+                <div class="box" data-draggable-id="Ml"></div>
+                <div class="box" data-draggable-id="vazia"></div>
+            </div>
+        </div>
+
+        <!-- <div class="sidebar"> -->
+        <div id="obs">
+            <h4>O Velho Testamento <br>é dividido em cinco partes:<br><br>
+                PENTATEUCO<br>
+                LIVROS HISTÓRICOS<br>
+                LIVROS POÉTICOS<br>
+                PROFETAS MAIORES<br>
+                PROFETAS MENORES<br><br>
+            </h4>
+        </div>
+        <div id="boxdrag">
+            <h4>Arraste o livro abaixo e disponha-o em sua prateleira correspondente e na sequência correta.</h4>
+            <div class="draggable" draggable="true">
+                <img alt="Gênesis" class="livro" id="Gn" draggable="true" src="/imagens/gn.png">
+                <img alt="Êxodo" class="livro" id="Ex" draggable="true" src="/imagens/ex.png">
+                <img alt="Levítico" class="livro" id="Lv" draggable="true" src="/imagens/lv.png">
+                <img alt="Números" class="livro" id="Nm" draggable="true" src="/imagens/nm.png">
+                <img alt="Deuteronômio" class="livro" id="Dt" draggable="true" src="/imagens/dt.png">
+                <img alt="Josué" class="livro" id="Js" draggable="true" src="/imagens/js.png">
+                <img alt="Juízes" class="livro" id="Jz" draggable="true" src="/imagens/jz.png">
+                <img alt="Rute" class="livro" id="Rt" draggable="true" src="/imagens/rt.png">
+                <img alt="1 Samuel" class="livro" id="1Sm" draggable="true" src="/imagens/1sm.png">
+                <img alt="2 Samuel" class="livro" id="2Sm" draggable="true" src="/imagens/2sm.png">
+                <img alt="1 Reis" class="livro" id="1Rs" draggable="true" src="/imagens/1rs.png">
+                <img alt="2 Reis" class="livro" id="2Rs" draggable="true" src="/imagens/2rs.png">
+                <img alt="1 Crônicas" class="livro" id="1Cr" draggable="true" src="/imagens/1cr.png">
+                <img alt="2 Crônicas" class="livro" id="2Cr" draggable="true" src="/imagens/2cr.png">
+                <img alt="Esdras" class="livro" id="Ed" draggable="true" src="/imagens/ed.png">
+                <img alt="Neemias" class="livro" id="Ne" draggable="true" src="/imagens/ne.png">
+                <img alt="Ester" class="livro" id="Et" draggable="true" src="/imagens/et.png">
+                <img alt="Jó" class="livro" id="Jo" draggable="true" src="/imagens/jo.png">
+                <img alt="Salmos" class="livro" id="Sl" draggable="true" src="/imagens/sl.png">
+                <img alt="Provérbios" class="livro" id="Pv" draggable="true" src="/imagens/pv.png">
+                <img alt="Eclesiastes" class="livro" id="Ec" draggable="true" src="/imagens/ec.png">
+                <img alt="Cantares" class="livro" id="Ct" draggable="true" src="/imagens/ct.png">
+                <img alt="Isaías" class="livro" id="Is" draggable="true" src="/imagens/is.png">
+                <img alt="Jeremias" class="livro" id="Jr" draggable="true" src="/imagens/jr.png">
+                <img alt="Lamentações" class="livro" id="Lm" draggable="true" src="/imagens/lm.png">
+                <img alt="Ezequiel" class="livro" id="Ez" draggable="true" src="/imagens/ez.png">
+                <img alt="Daniel" class="livro" id="Dn" draggable="true" src="/imagens/dn.png">
+                <img alt="Oseias" class="livro" id="Os" draggable="true" src="/imagens/os.png">
+                <img alt="Joel" class="livro" id="Jl" draggable="true" src="/imagens/jl.png">
+                <img alt="Amós" class="livro" id="Am" draggable="true" src="/imagens/am.png">
+                <img alt="Obadias" class="livro" id="Ob" draggable="true" src="/imagens/ob.png">
+                <img alt="Jonas" class="livro" id="Jn" draggable="true" src="/imagens/jn.png">
+                <img alt="Miquéias" class="livro" id="Mq" draggable="true" src="/imagens/mq.png">
+                <img alt="Naum" class="livro" id="Na" draggable="true" src="/imagens/na.png">
+                <img alt="Habacuque" class="livro" id="Hc" draggable="true" src="/imagens/hc.png">
+                <img alt="Sofonias" class="livro" id="Sf" draggable="true" src="/imagens/sf.png">
+                <img alt="Ageu" class="livro" id="Ag" draggable="true" src="/imagens/ag.png">
+                <img alt="Zacarias" class="livro" id="Zc" draggable="true" src="/imagens/zc.png">
+                <img alt="Malaquias" class="livro" id="Ml" draggable="true" src="/imagens/ml.png">
+                <img alt="1 Macabeus" class="livro" id="1Mc" draggable="true" src="/imagens/1macabeus.png">
+                <img alt="2 Macabeus" class="livro" id="2Mc" draggable="true" src="/imagens/2macabeus.png">
+                <img alt="Baruque" class="livro" id="Br" draggable="true" src="/imagens/baruque.png">
+                <img alt="Eclesiástico" class="livro" id="Ecl" draggable="true" src="/imagens/eclesiastico.png">
+                <img alt="Judite" class="livro" id="Jd" draggable="true" src="/imagens/judite.png">
+                <img alt="Sabedoria" class="livro" id="Sb" draggable="true" src="/imagens/sabedoria.png">
+                <img alt="Tobias" class="livro" id="Tb" draggable="true" src="/imagens/tobias.png">
+            </div>
+        </div>
+        <div id=livrosapocrifos>
+            <h4 id="titulo-apocrifos">Disponha abaixo os livros apócrifos</h4>
+            <div class="boxapocrifos"></div>
+            <div class="boxapocrifos"></div>
+            <div class="boxapocrifos"></div>
+            <div class="boxapocrifos"></div>
+            <div class="boxapocrifos"></div>
+            <div class="boxapocrifos"></div>
+            <div class="boxapocrifos"></div>
+        </div>
+        <div id="Marcatempo">
+            <h5>TEMPO:</h5>
+            <h2 id="cronometro">00:00</h2>
+        </div>
+        <div id="Marcapontuacao">
+            <h5>PONTOS:</h5>
+            <h2 id="indicador">00</h2>
+        </div>
+        <button type="button" id="sair-salvar" onclick="clicarSair()">SALVAR E SAIR</button>
+
+        <!-- </div> -->
+    </div>
+    <script src="scriptVT.js" defer></script>
+</body>
+
+</html>
