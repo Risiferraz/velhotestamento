@@ -9,14 +9,31 @@ body {
     background-color: #1f1b11;
 }
 
+html, body {
+    height: 100%;
+}
+
+#stage {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    align-items: start;
+    justify-items: start;
+    overflow: hidden;
+    padding-top: 2%;
+    height: 100vh;
+    max-height: 100vh;
+}
+
 .container {
     display: grid;
     grid-template-columns: 250px 250px 250px;
     grid-template-rows: 210px 210px 315px 115px;
     width: 750px;
     height: 850px;
-    margin: 2% auto;
+    margin: 0;
     background-color: #9f854b;
+    transform-origin: top left;
 }
 
 .estante {

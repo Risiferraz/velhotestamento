@@ -1,3 +1,51 @@
+// Função para embaralhar a ordem das imagens dos livros
+function shuffleBooks() {
+  const boxdrag = document.getElementById('boxdrag');
+  const draggableDiv = boxdrag.querySelector('.draggable');
+  if (!draggableDiv) return;
+  
+  const books = Array.from(draggableDiv.querySelectorAll('.livro'));
+  
+  // Fisher-Yates shuffle algorithm
+  for (let i = books.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = books[i];
+    books[i] = books[j];
+    books[j] = temp;
+  }
+  
+  // Remover todas as imagens
+  books.forEach(book => book.remove());
+  
+  // Reinseri-las na ordem embaralhada
+  books.forEach(book => draggableDiv.appendChild(book));
+}
+
+// Proportional scaling of the entire game area
+(function setupStageScaling() {
+  const BASE_WIDTH = 750;
+  const BASE_HEIGHT = 850;
+  const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
+  function scaleStage() {
+    const stageEl = document.getElementById('game-base');
+    const stageWrapper = document.getElementById('stage');
+    if (!stageEl || !stageWrapper) return;
+    // Usar o tamanho interno disponível do wrapper (considera padding)
+    const availableWidth = stageWrapper.clientWidth;
+    const availableHeight = stageWrapper.clientHeight;
+    const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
+    const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
+    const scaledWidth = BASE_WIDTH * scale;
+    const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
+    stageEl.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
+  }
+  window.addEventListener('resize', scaleStage);
+  window.addEventListener('DOMContentLoaded', scaleStage);
+})();
+
+// Embaralhar livros na entrada da página
+window.addEventListener('DOMContentLoaded', shuffleBooks);
+
 const draggableElements = document.querySelectorAll("#draggable");//os elementos dragáveis são id=draggable
 const droppableElements = document.querySelectorAll("#box");//os elementos dropáveis são de id= box
 
@@ -38,13 +86,3 @@ function dragDrop(event) {
   data.style
 }
 
-//Funções a serem implementadas:
-//1. Ao entrar nessa página (novo nível do jogo) deve surgir na div "boxdrag" a imagem do livro que será parte da div class="draggable" que foi enviada ao ser depositada na área correspondente no outro nível do jogo (nesse caso = velho testamento)
-//Ao arrastar esse elemento dragável, esse deverá ser depositado no local adequado
-//2. Caso seja depositado no local correto, a imagem deverá preencher todo o espaço da div "box", passar a opacidade para 1 e receber borda para destaque, e aparecer a imagem de ok acertou! Também deve perder a característica "dragável" para que fique ali definitivamente e não possa mais ser movida dali. Também deverá conduzir o jogado ao primeiro nível do jogo para o próximo livro.
-//3. Caso seja depositado em local incorreto, a imagem deverá preencher todo o espaço da div "box", mas manter a opacidade em 0.2, e manter a capacidade de ser reposicionada continuando "dragável". Também deverá aparecer mensagem de erro (imagem = /imagens/tryagain)
-//4. No Caso dos livros apócrifos, ao serem depositados em local inadequado, deverá ocorrer o mesmo acima, no caso de serem depositados na div "boxapocrifos" a função deverá rotacionar a imagem em 90º sentido horário; a imagem deverá preencher 100% da área do box e receber opacidade 1 (100%) e demais características conforme acima (item 2).
-//5. Quanto à pontuação, pensei o seguinte:
-// cada vez que for depositado em local errado perde 1 ponto
-// cada vez que for depositado em local certo ganha um ponto
-// 6. Ao ser depositado a imagem do livro em local certo, deverá voltar ao nível 1 para reiniciar o processo.
