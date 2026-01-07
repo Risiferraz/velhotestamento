@@ -91,10 +91,20 @@ html, body {
     margin: 0.5%;
     width: 33px;
     height: 63px;
-    background-color: #534a35;
-    opacity: 0.2;
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
     border: solid 1px #000000;
     box-shadow: 3px 2px rgb(37, 22, 5);
+}
+
+.box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: #534a35;
+    opacity: 0.2;
+    z-index: 0;
 }
 
 .box:hover {
@@ -135,10 +145,41 @@ h5 {
     margin: 10% auto;
 }
 
+/* No boxdrag, as imagens devem ficar sobrepostas como antes */
+#boxdrag .draggable {
+    position: relative;
+}
+
+#boxdrag .livro {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
 .livro {
     width: 40px;
-    position: absolute;
     border: 1px solid transparent;
+}
+
+/* Imagens dentro das boxes devem preencher 100% do espaço da box */
+.box > .livro {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* Permitir que imagens fixas nas boxes também preencham 100% */
+.box > .box-livro {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
 }
 
 .livro:hover {
@@ -168,10 +209,20 @@ h5 {
     width: 85px;
     height: 28px;
     margin-top: 6px;
-    background-color: #534a35;
-    opacity: 0.7;
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
     border: solid 1px #241d0e;
     box-shadow: 3px 2px black;
+}
+
+.boxapocrifos::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: #534a35;
+    opacity: 0.7;
+    z-index: 0;
 }
 
 #Marcatempo {

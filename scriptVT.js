@@ -1,5 +1,5 @@
 // Função para embaralhar a ordem das imagens dos livros
-function shuffleBooks() {
+function embaralharLivros() {
   const boxdrag = document.getElementById('boxdrag');
   const draggableDiv = boxdrag.querySelector('.draggable');
   if (!draggableDiv) return;
@@ -22,7 +22,7 @@ function shuffleBooks() {
 }
 
 // Proportional scaling of the entire game area
-(function setupStageScaling() {
+(function escalaDinamicaPagina() {
   const BASE_WIDTH = 750;
   const BASE_HEIGHT = 850;
   const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
@@ -44,45 +44,123 @@ function shuffleBooks() {
 })();
 
 // Embaralhar livros na entrada da página
-window.addEventListener('DOMContentLoaded', shuffleBooks);
-
-const draggableElements = document.querySelectorAll("#draggable");//os elementos dragáveis são id=draggable
-const droppableElements = document.querySelectorAll("#box");//os elementos dropáveis são de id= box
-
-draggableElements.forEach(elem => {//para cada elemento DRAGÁVEL...
-  elem.addEventListener("dragstart", dragStart);//quando o evento (o usuário começa a arrastar um item)
-//a função drag Star será acionada
+window.addEventListener('DOMContentLoaded', function() {
+  embaralharLivros();
+  setupBookDragListeners();
+  setupDropZones();
 });
 
-droppableElements.forEach(elem => {//para cada elemento DROPÁVEL...
-  elem.addEventListener("dragover", dragOver); // quando o evento (um item arrastado está passando sobre um alvo de queda válido, aciona a função DARG OVER
-  elem.addEventListener("dragleave", dragLeave); // quando o evento (o mouse é liberado) é acionada a função
-  elem.addEventListener("drop", dragDrop); // quando o evento (um item dragável é liberado sobre um item dropável a função é acionada
-});
-
-//Eventos acionados no elemento drag
-
-function dragStart(event) {//quando ocorrer o evento (dragstar) a função (dragStar) será acionada
-  event.dataTransfer.setData("text/plain", event.target.id);
+function setupBookDragListeners() {
+  // Adicionar listeners nas imagens .livro
+  const bookImages = document.querySelectorAll(".livro");
+  bookImages.forEach(book => {
+    book.addEventListener("dragstart", dragStart);
+    book.addEventListener("dragend", dragEnd);
+  });
 }
 
-//Eventos acionados no elemento drop target
+// (removida) preencherBoxesComLivros: agora as imagens já estão dentro das boxes no HTML
 
-function dragOver(event) {//quando ocorrer o evento (dragover) a função (dragOver) será acionada
-  event.preventDefault(); // impede o comportamento padrão (default) permitindo o "drop"
-  //add.style.transitionDelay = "2s";
-}
-
-function dragLeave(event) {
-  if(!event.target.classList.contains("dropped")) {
-  event.target.classList.remove("box:hover");
+// Define a drag image de 25x60px e hotspot ~no canto inferior direito
+function dragStart(event) {
+  const img = event.target;
+  // Garante que temos um id para o drop usar
+  if (img && img.id) {
+    event.dataTransfer.setData("text/plain", img.id);
+  }
+  // Permite movimentação e registra o elemento pai de origem para possíveis trocas
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move';
+  }
+  img._sourceParent = img.parentElement;
+  const ghostW = 25;
+  const ghostH = 60;
+  // 1) criar um helper visual 25x60 totalmente opaco que segue o cursor
+  const helper = new Image();
+  helper.src = img.src;
+  helper.width = ghostW;
+  helper.height = ghostH;
+  helper.style.width = ghostW + 'px';
+  helper.style.height = ghostH + 'px';
+  helper.style.position = 'fixed';
+  helper.style.left = '0px';
+  helper.style.top = '0px';
+  helper.style.pointerEvents = 'none';
+  helper.style.userSelect = 'none';
+  helper.style.zIndex = '2147483647';
+  helper.style.opacity = '1';
+  document.body.appendChild(helper);
+  const offsetX = ghostW * 0.9; // hotspot próximo ao canto inferior direito
+  const offsetY = ghostH * 0.9;
+  const onDragMove = (e) => {
+    helper.style.left = (e.clientX - offsetX) + 'px';
+    helper.style.top = (e.clientY - offsetY) + 'px';
+  };
+  document.addEventListener('dragover', onDragMove);
+  img._dragHelper = helper;
+  img._onDragMove = onDragMove;
+  // 2) ocultar o ghost nativo usando um canvas transparente 1x1
+  if (event.dataTransfer && event.dataTransfer.setDragImage) {
+    const blank = document.createElement('canvas');
+    blank.width = 1;
+    blank.height = 1;
+    event.dataTransfer.setDragImage(blank, 0, 0);
   }
 }
 
-function dragDrop(event) {
-  event.preventDefault();
-  var data = event.target.getAttribute("data-draggable-id");
-  event.target.appendChild(document.getElementById(data)); 
-  data.style
+function dragEnd(event) {
+  const img = event.target;
+  if (img && img._dragHelper) {
+    if (img._dragHelper.parentNode) img._dragHelper.parentNode.removeChild(img._dragHelper);
+    delete img._dragHelper;
+  }
+  if (img && img._onDragMove) {
+    document.removeEventListener('dragover', img._onDragMove);
+    delete img._onDragMove;
+  }
+}
+
+// Torna todas as .box dropáveis, exceto as com id="vazia"
+function setupDropZones() {
+  const boxes = document.querySelectorAll('.box');
+  boxes.forEach(box => {
+    // Necessário para que o elemento seja considerado alvo de drop
+    box.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      box.classList.add('droppable-hover');
+    });
+
+    box.addEventListener('dragenter', () => {
+      box.classList.add('droppable-hover');
+    });
+
+    box.addEventListener('dragleave', () => {
+      box.classList.remove('droppable-hover');
+    });
+
+    box.addEventListener('drop', (e) => {
+      e.preventDefault();
+      box.classList.remove('droppable-hover');
+      const id = e.dataTransfer ? e.dataTransfer.getData('text/plain') : null;
+      if (!id) return;
+      const dragged = document.getElementById(id);
+      if (!dragged) return;
+
+      // Evita operações redundantes
+      if (dragged.parentElement === box) return;
+
+      const sourceParent = dragged._sourceParent || dragged.parentElement;
+      const existing = box.querySelector('.livro');
+
+      // Se já houver um livro na box alvo e não for o mesmo, faz swap: devolve o existente para a origem
+      if (existing && existing !== dragged) {
+        if (sourceParent) sourceParent.appendChild(existing);
+      }
+
+      // Move o livro arrastado para a box alvo
+      box.appendChild(dragged);
+    });
+  });
 }
 
