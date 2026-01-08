@@ -90,8 +90,8 @@ function dragStart(event) {
   helper.style.zIndex = '2147483647';
   helper.style.opacity = '1';
   document.body.appendChild(helper);
-  const offsetX = ghostW * 0.9; // hotspot próximo ao canto inferior direito
-  const offsetY = ghostH * 0.9;
+  const offsetX = ghostW * 0.5; // hotspot centralizado
+  const offsetY = ghostH * 0.5;
   const onDragMove = (e) => {
     helper.style.left = (e.clientX - offsetX) + 'px';
     helper.style.top = (e.clientY - offsetY) + 'px';

@@ -40,7 +40,7 @@ html, body {
     grid-area: 1 / 1 / span 3 / span 2;
     display: grid;
     grid-template-rows: 206px 102px 100px 102px 100px;
-    background: url("../imagens/estanteat1.png");
+    background: url("../imagens/estanteat.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
@@ -145,7 +145,6 @@ h5 {
     margin: 10% auto;
 }
 
-/* No boxdrag, as imagens devem ficar sobrepostas como antes */
 #boxdrag .draggable {
     position: relative;
 }
@@ -159,10 +158,13 @@ h5 {
 
 .livro {
     width: 40px;
-    border: 1px solid transparent;
 }
 
-/* Imagens dentro das boxes devem preencher 100% do espaço da box */
+.livro:hover {
+    transform: scale(1.4);
+    cursor: move;
+}
+
 .box > .livro {
     position: absolute;
     inset: 0;
@@ -172,22 +174,14 @@ h5 {
     z-index: 1;
 }
 
-/* Permitir que imagens fixas nas boxes também preencham 100% */
 .box > .box-livro {
+    display: none;
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     z-index: 1;
-}
-
-.livro:hover {
-    border-width: 2px;
-    transform: scale(1.1);
-    /*Quando o mouse passa em cima do elemento a ser movido, ele aumenta seu tamanho em 10%*/
-    cursor: move;
-    /*muda o tipo do cursor - neste caso para mover o elemento*/
 }
 
 #titulo-apocrifos {
