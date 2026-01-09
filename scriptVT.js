@@ -1,3 +1,6 @@
+// Variável global para rastrear o elemento sendo arrastado
+let currentDraggedElement = null;
+
 // Função para embaralhar a ordem das imagens dos livros
 function embaralharLivros() {
   const boxdrag = document.getElementById('boxdrag');
@@ -64,6 +67,7 @@ function setupBookDragListeners() {
 // Define a drag image de 25x60px e hotspot ~no canto inferior direito
 function dragStart(event) {
   const img = event.target;
+  currentDraggedElement = img; // Armazena referência global
   // Garante que temos um id para o drop usar
   if (img && img.id) {
     event.dataTransfer.setData("text/plain", img.id);
@@ -73,6 +77,10 @@ function dragStart(event) {
     event.dataTransfer.effectAllowed = 'move';
   }
   img._sourceParent = img.parentElement;
+  
+  // Ocultar a imagem original durante o arraste
+  img.style.opacity = '0';
+  
   const ghostW = 25;
   const ghostH = 60;
   // 1) criar um helper visual 25x60 totalmente opaco que segue o cursor
@@ -89,6 +97,7 @@ function dragStart(event) {
   helper.style.userSelect = 'none';
   helper.style.zIndex = '2147483647';
   helper.style.opacity = '1';
+  helper.style.transformOrigin = 'center center';
   document.body.appendChild(helper);
   const offsetX = ghostW * 0.5; // hotspot centralizado
   const offsetY = ghostH * 0.5;
@@ -110,6 +119,11 @@ function dragStart(event) {
 
 function dragEnd(event) {
   const img = event.target;
+  currentDraggedElement = null; // Limpa referência global
+  
+  // Restaurar a opacidade da imagem original
+  if (img) img.style.opacity = '1';
+  
   if (img && img._dragHelper) {
     if (img._dragHelper.parentNode) img._dragHelper.parentNode.removeChild(img._dragHelper);
     delete img._dragHelper;
@@ -117,6 +131,28 @@ function dragEnd(event) {
   if (img && img._onDragMove) {
     document.removeEventListener('dragover', img._onDragMove);
     delete img._onDragMove;
+  }
+  
+  // Verificar se o livro foi depositado no box correto
+  if (img && img.parentElement && img.parentElement.classList.contains('box')) {
+    const box = img.parentElement;
+    const boxId = box.getAttribute('data-draggable-id');
+    const livroId = img.id;
+    
+    // Remover o sufixo "_drag" do ID do livro para comparar com o ID do box
+    const livroIdSemSufixo = livroId.replace('_drag', '');
+    
+    // Se o id do livro (sem "_drag") corresponde ao id do box
+    if (boxId === livroIdSemSufixo) {
+      // Ocultar a imagem do livro arrastável
+      img.style.display = 'none';
+      
+      // Mostrar o box-livro correspondente
+      const boxLivro = box.querySelector('.box-livro');
+      if (boxLivro) {
+        boxLivro.style.display = 'block';
+      }
+    }
   }
 }
 
@@ -162,5 +198,59 @@ function setupDropZones() {
       box.appendChild(dragged);
     });
   });
+  
+  // Evento especial para boxapocrifos
+  setupBoxApocrifosRotation();
 }
 
+// Configurar rotação de 90 graus para livros apócrifos sobre boxapocrifos
+function setupBoxApocrifosRotation() {
+  const boxesApocrifos = document.querySelectorAll('.boxapocrifos');
+  const livrosApocrifos = ['1Mc', '2Mc', 'Br', 'Ecl', 'Jd', 'Sb', 'Tb'];
+  
+  boxesApocrifos.forEach(boxApocrifo => {
+    boxApocrifo.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      
+      // Usar o elemento arrastado armazenado globalmente
+      if (currentDraggedElement && currentDraggedElement._dragHelper) {
+        const livroId = currentDraggedElement.id.replace('_drag', '');
+        
+        // Verificar se é um livro apócrifo
+        if (livrosApocrifos.includes(livroId)) {
+          // Aplicar rotação de 90 graus no HELPER (imagem que segue o cursor)
+          currentDraggedElement._dragHelper.style.transform = 'rotate(90deg)';
+        }
+      }
+    });
+    
+    boxApocrifo.addEventListener('dragleave', (e) => {
+      // Remover rotação quando sair do box apócrifo
+      if (currentDraggedElement && currentDraggedElement._dragHelper) {
+        const livroId = currentDraggedElement.id.replace('_drag', '');
+        if (livrosApocrifos.includes(livroId)) {
+          currentDraggedElement._dragHelper.style.transform = '';
+        }
+      }
+    });
+    
+    boxApocrifo.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const id = e.dataTransfer ? e.dataTransfer.getData('text/plain') : null;
+      if (!id) return;
+      const dragged = document.getElementById(id);
+      if (!dragged) return;
+      
+      const livroId = id.replace('_drag', '');
+      
+      // Se for um livro apócrifo, manter a rotação
+      if (livrosApocrifos.includes(livroId)) {
+        dragged.style.transform = 'rotate(90deg)';
+      }
+      
+      // Move o livro para o box
+      boxApocrifo.appendChild(dragged);
+    });
+  });
+}
