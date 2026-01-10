@@ -9,6 +9,9 @@ let timeoutHide = null;
 // Flag para controlar se a mensagem de erro já foi mostrada
 let mensagemErroJaMostrada = false;
 
+// Controlar qual é o próximo box apócrifo disponível (de 7 a 1)
+let proximoBoxApocrifo = 7;
+
 // Função para embaralhar a ordem das imagens dos livros
 function embaralharLivros() {
   const boxdrag = document.getElementById('boxdrag');
@@ -304,7 +307,7 @@ function mostrarMensagemErro() {
     timeoutHide = setTimeout(() => {
       mensagem.style.display = 'none';
     }, 300);
-  }, 2000);
+  }, 3500);
 }
 
 // Configurar rotação de 90 graus para livros apócrifos sobre boxapocrifos
@@ -314,6 +317,15 @@ function setupBoxApocrifosRotation() {
   
   boxesApocrifos.forEach(boxApocrifo => {
     boxApocrifo.addEventListener('dragover', (e) => {
+      // Permitir drop apenas no próximo box disponível
+      const boxId = boxApocrifo.getAttribute('id');
+      const boxNumber = parseInt(boxId.replace('boxapocrifo', ''));
+      
+      if (boxNumber !== proximoBoxApocrifo) {
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'none';
+        return;
+      }
+      
       // Usar o elemento arrastado armazenado globalmente
       if (currentDraggedElement) {
         const livroId = currentDraggedElement.id.replace('_drag', '');
@@ -348,6 +360,15 @@ function setupBoxApocrifosRotation() {
     
     boxApocrifo.addEventListener('drop', (e) => {
       e.preventDefault();
+      
+      // Permitir drop apenas no próximo box disponível
+      const boxId = boxApocrifo.getAttribute('id');
+      const boxNumber = parseInt(boxId.replace('boxapocrifo', ''));
+      
+      if (boxNumber !== proximoBoxApocrifo) {
+        return;
+      }
+      
       const id = e.dataTransfer ? e.dataTransfer.getData('text/plain') : null;
       if (!id) return;
       const dragged = document.getElementById(id);
@@ -396,15 +417,28 @@ function setupBoxApocrifosRotation() {
         imgBox.src = `/imagens/${nomeArquivo}.png`;
         imgBox.alt = dragged.alt;
         imgBox.id = livroId;
-        imgBox.style.position = 'relative';
+        imgBox.style.position = 'absolute';
+        imgBox.style.top = '0';
+        imgBox.style.left = '0';
+        imgBox.style.width = '100%';
+        imgBox.style.height = '100%';
+        imgBox.style.objectFit = 'fill';
         imgBox.style.zIndex = '1';
-        imgBox.style.maxWidth = '100%';
-        imgBox.style.maxHeight = '100%';
-        imgBox.style.objectFit = 'contain';
-        imgBox.setAttribute('draggable', 'false'); // Tornar não-dragável
-        imgBox.style.pointerEvents = 'none'; // Desabilitar interação com mouse
+        imgBox.setAttribute('draggable', 'false');
+        imgBox.style.pointerEvents = 'none';
         
         boxApocrifo.appendChild(imgBox);
+      }
+      
+      // Ativar o próximo box (decrementar)
+      proximoBoxApocrifo--;
+      
+      // Se ainda há boxes disponíveis, tornar o próximo visível (100% opacidade)
+      if (proximoBoxApocrifo >= 1) {
+        const proximoBox = document.getElementById(`boxapocrifo${proximoBoxApocrifo}`);
+        if (proximoBox) {
+          proximoBox.style.opacity = '1';
+        }
       }
     });
   });
