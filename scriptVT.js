@@ -60,6 +60,13 @@ function setupBookDragListeners() {
     book.addEventListener("dragstart", dragStart);
     book.addEventListener("dragend", dragEnd);
   });
+  
+  // Garantir que imagens box-livro não sejam arrastáveis
+  const boxLivros = document.querySelectorAll(".box-livro");
+  boxLivros.forEach(boxLivro => {
+    boxLivro.setAttribute("draggable", "false");
+    boxLivro.style.pointerEvents = "none"; // Desabilitar completamente interação com mouse
+  });
 }
 
 // (removida) preencherBoxesComLivros: agora as imagens já estão dentro das boxes no HTML
@@ -67,6 +74,13 @@ function setupBookDragListeners() {
 // Define a drag image de 25x60px e hotspot ~no canto inferior direito
 function dragStart(event) {
   const img = event.target;
+  
+  // Apenas permitir drag de imagens com classe "livro"
+  if (!img.classList.contains('livro')) {
+    event.preventDefault();
+    return;
+  }
+  
   currentDraggedElement = img; // Armazena referência global
   // Garante que temos um id para o drop usar
   if (img && img.id) {
@@ -102,6 +116,8 @@ function dragStart(event) {
   const offsetX = ghostW * 0.5; // hotspot centralizado
   const offsetY = ghostH * 0.5;
   const onDragMove = (e) => {
+    // Parar de mover se o drop foi bem-sucedido
+    if (img._dropSuccessful || !helper.parentNode) return;
     helper.style.left = (e.clientX - offsetX) + 'px';
     helper.style.top = (e.clientY - offsetY) + 'px';
   };
@@ -124,13 +140,21 @@ function dragEnd(event) {
   // Restaurar a opacidade da imagem original
   if (img) img.style.opacity = '1';
   
-  if (img && img._dragHelper) {
-    if (img._dragHelper.parentNode) img._dragHelper.parentNode.removeChild(img._dragHelper);
-    delete img._dragHelper;
+  // Só limpar o helper se não foi um drop bem-sucedido (já foi removido no evento drop)
+  if (img && !img._dropSuccessful) {
+    if (img._dragHelper) {
+      if (img._dragHelper.parentNode) img._dragHelper.parentNode.removeChild(img._dragHelper);
+      delete img._dragHelper;
+    }
+    if (img._onDragMove) {
+      document.removeEventListener('dragover', img._onDragMove);
+      delete img._onDragMove;
+    }
   }
-  if (img && img._onDragMove) {
-    document.removeEventListener('dragover', img._onDragMove);
-    delete img._onDragMove;
+  
+  // Limpar a flag de drop bem-sucedido
+  if (img && img._dropSuccessful) {
+    delete img._dropSuccessful;
   }
   
   // Verificar se o livro foi depositado no box correto
@@ -196,6 +220,25 @@ function setupDropZones() {
 
       // Move o livro arrastado para a box alvo
       box.appendChild(dragged);
+      
+      // Verificar se o livro foi colocado no lugar correto
+      const boxId = box.getAttribute('data-draggable-id');
+      const livroIdSemSufixo = id.replace('_drag', '');
+      
+      if (boxId === livroIdSemSufixo) {
+        // Marcar que o drop foi bem-sucedido PRIMEIRO para parar onDragMove imediatamente
+        dragged._dropSuccessful = true;
+        
+        // Remover imediatamente o helper
+        if (dragged._dragHelper && dragged._dragHelper.parentNode) {
+          dragged._dragHelper.parentNode.removeChild(dragged._dragHelper);
+          delete dragged._dragHelper;
+        }
+        if (dragged._onDragMove) {
+          document.removeEventListener('dragover', dragged._onDragMove);
+          delete dragged._onDragMove;
+        }
+      }
     });
   });
   
@@ -210,18 +253,25 @@ function setupBoxApocrifosRotation() {
   
   boxesApocrifos.forEach(boxApocrifo => {
     boxApocrifo.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
-      
       // Usar o elemento arrastado armazenado globalmente
-      if (currentDraggedElement && currentDraggedElement._dragHelper) {
+      if (currentDraggedElement) {
         const livroId = currentDraggedElement.id.replace('_drag', '');
         
-        // Verificar se é um livro apócrifo
+        // Permitir drop apenas se for um livro apócrifo
         if (livrosApocrifos.includes(livroId)) {
-          // Aplicar rotação de 90 graus no HELPER (imagem que segue o cursor)
-          currentDraggedElement._dragHelper.style.transform = 'rotate(90deg)';
+          e.preventDefault();
+          if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+          
+          if (currentDraggedElement._dragHelper) {
+            // Aplicar rotação de 90 graus no HELPER (imagem que segue o cursor)
+            currentDraggedElement._dragHelper.style.transform = 'rotate(90deg)';
+          }
+        } else {
+          // Bloquear o drop para livros não apócrifos
+          if (e.dataTransfer) e.dataTransfer.dropEffect = 'none';
         }
+      } else {
+        e.preventDefault();
       }
     });
     
@@ -244,13 +294,55 @@ function setupBoxApocrifosRotation() {
       
       const livroId = id.replace('_drag', '');
       
-      // Se for um livro apócrifo, manter a rotação
-      if (livrosApocrifos.includes(livroId)) {
-        dragged.style.transform = 'rotate(90deg)';
+      // Apenas permitir drop se for um livro apócrifo
+      if (!livrosApocrifos.includes(livroId)) {
+        return; // Bloqueia o drop de livros não apócrifos
       }
       
-      // Move o livro para o box
-      boxApocrifo.appendChild(dragged);
+      // Marcar que o drop foi bem-sucedido PRIMEIRO para parar onDragMove imediatamente
+      dragged._dropSuccessful = true;
+      
+      // Remover imediatamente o helper
+      if (dragged._dragHelper && dragged._dragHelper.parentNode) {
+        dragged._dragHelper.parentNode.removeChild(dragged._dragHelper);
+        delete dragged._dragHelper;
+      }
+      if (dragged._onDragMove) {
+        document.removeEventListener('dragover', dragged._onDragMove);
+        delete dragged._onDragMove;
+      }
+      
+      // Mapeamento de IDs para nomes de arquivos
+      const apocrifosMap = {
+        '1Mc': '1macabeus',
+        '2Mc': '2macabeus',
+        'Br': 'baruque',
+        'Ecl': 'eclesiastico',
+        'Jd': 'judite',
+        'Sb': 'sabedoria',
+        'Tb': 'tobias'
+      };
+      
+      // Ocultar a imagem draggable
+      dragged.style.display = 'none';
+      
+      // Criar e inserir a imagem correspondente da pasta imagens
+      const nomeArquivo = apocrifosMap[livroId];
+      if (nomeArquivo) {
+        const imgBox = document.createElement('img');
+        imgBox.src = `/imagens/${nomeArquivo}.png`;
+        imgBox.alt = dragged.alt;
+        imgBox.id = livroId;
+        imgBox.style.position = 'relative';
+        imgBox.style.zIndex = '1';
+        imgBox.style.maxWidth = '100%';
+        imgBox.style.maxHeight = '100%';
+        imgBox.style.objectFit = 'contain';
+        imgBox.setAttribute('draggable', 'false'); // Tornar não-dragável
+        imgBox.style.pointerEvents = 'none'; // Desabilitar interação com mouse
+        
+        boxApocrifo.appendChild(imgBox);
+      }
     });
   });
 }
