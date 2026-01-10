@@ -276,3 +276,13 @@ h5 {
     background: rgb(229, 164, 65);
     transform: scale(110%);
 }
+
+#mensagem-de-erro {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: none;
+    width: 80vw;
+}

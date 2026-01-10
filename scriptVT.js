@@ -1,6 +1,14 @@
 // Variável global para rastrear o elemento sendo arrastado
 let currentDraggedElement = null;
 
+// Variáveis para controlar timeouts da mensagem de erro
+let timeoutMensagemErro = null;
+let timeoutFadeOut = null;
+let timeoutHide = null;
+
+// Flag para controlar se a mensagem de erro já foi mostrada
+let mensagemErroJaMostrada = false;
+
 // Função para embaralhar a ordem das imagens dos livros
 function embaralharLivros() {
   const boxdrag = document.getElementById('boxdrag');
@@ -183,6 +191,8 @@ function dragEnd(event) {
 // Torna todas as .box dropáveis, exceto as com id="vazia"
 function setupDropZones() {
   const boxes = document.querySelectorAll('.box');
+  const livrosApocrifos = ['1Mc', '2Mc', 'Br', 'Ecl', 'Jd', 'Sb', 'Tb'];
+  
   boxes.forEach(box => {
     // Necessário para que o elemento seja considerado alvo de drop
     box.addEventListener('dragover', (e) => {
@@ -207,6 +217,16 @@ function setupDropZones() {
       const dragged = document.getElementById(id);
       if (!dragged) return;
 
+      // Verificar se o livro foi colocado no lugar correto
+      const boxId = box.getAttribute('data-draggable-id');
+      const livroIdSemSufixo = id.replace('_drag', '');
+      
+      // Verificar se é um livro apócrifo sendo dropado em box normal
+      const isLivroApocrifo = livrosApocrifos.includes(livroIdSemSufixo);
+      
+      // Verificar se é drop incorreto ANTES de mover
+      const isDropIncorreto = (boxId !== livroIdSemSufixo) || isLivroApocrifo;
+      
       // Evita operações redundantes
       if (dragged.parentElement === box) return;
 
@@ -221,10 +241,6 @@ function setupDropZones() {
       // Move o livro arrastado para a box alvo
       box.appendChild(dragged);
       
-      // Verificar se o livro foi colocado no lugar correto
-      const boxId = box.getAttribute('data-draggable-id');
-      const livroIdSemSufixo = id.replace('_drag', '');
-      
       if (boxId === livroIdSemSufixo) {
         // Marcar que o drop foi bem-sucedido PRIMEIRO para parar onDragMove imediatamente
         dragged._dropSuccessful = true;
@@ -238,12 +254,57 @@ function setupDropZones() {
           document.removeEventListener('dragover', dragged._onDragMove);
           delete dragged._onDragMove;
         }
+      } else if (isDropIncorreto) {
+        // Drop incorreto - mostrar mensagem de erro
+        mostrarMensagemErro();
       }
     });
   });
   
   // Evento especial para boxapocrifos
   setupBoxApocrifosRotation();
+}
+
+// Função para mostrar mensagem de erro com animação
+function mostrarMensagemErro() {
+  // Só mostrar se for a primeira vez
+  if (mensagemErroJaMostrada) return;
+  
+  const mensagem = document.getElementById('mensagem-de-erro');
+  if (!mensagem) return;
+  
+  // Marcar que a mensagem já foi mostrada
+  mensagemErroJaMostrada = true;
+  
+  // Limpar timeouts anteriores se existirem
+  if (timeoutMensagemErro) clearTimeout(timeoutMensagemErro);
+  if (timeoutFadeOut) clearTimeout(timeoutFadeOut);
+  if (timeoutHide) clearTimeout(timeoutHide);
+  
+  // Resetar e mostrar com fade-in
+  mensagem.style.transition = 'none';
+  mensagem.style.opacity = '0';
+  mensagem.style.display = 'block';
+  
+  // Forçar reflow para garantir que a mudança seja aplicada
+  mensagem.offsetHeight;
+  
+  // Animar fade-in
+  timeoutMensagemErro = setTimeout(() => {
+    mensagem.style.transition = 'opacity 0.3s ease-in';
+    mensagem.style.opacity = '1';
+  }, 10);
+  
+  // Esconder após 2 segundos com fade-out
+  timeoutFadeOut = setTimeout(() => {
+    mensagem.style.transition = 'opacity 0.3s ease-out';
+    mensagem.style.opacity = '0';
+    
+    // Remover display após animação
+    timeoutHide = setTimeout(() => {
+      mensagem.style.display = 'none';
+    }, 300);
+  }, 2000);
 }
 
 // Configurar rotação de 90 graus para livros apócrifos sobre boxapocrifos
@@ -296,6 +357,8 @@ function setupBoxApocrifosRotation() {
       
       // Apenas permitir drop se for um livro apócrifo
       if (!livrosApocrifos.includes(livroId)) {
+        // Mostrar mensagem de erro para livro não-apócrifo em box apócrifo
+        mostrarMensagemErro();
         return; // Bloqueia o drop de livros não apócrifos
       }
       
