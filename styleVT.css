@@ -336,15 +336,11 @@ h5 {
 #mensagem-final {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
     z-index: 10;
     background-color: #e0c282;
-    max-width: 600px;
-    min-height: 80vh;
-    grid-template-rows: 18vh 9vh 9vh 64vh;
+    width: 750px;
+    height: 850px;
+    grid-template-rows: 15vh 9vh 9vh auto;
     grid-template-columns: 1fr 1fr;
 }
 
