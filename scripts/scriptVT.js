@@ -7,6 +7,12 @@ let mensagemErroJaMostrada = false;
 // Controlar qual é o próximo box apócrifo disponível (de 7 a 1)
 let proximoBoxApocrifo = 7;
 
+// Contadores para verificar fim de jogo
+let livrosNormaisDropados = 0; // Total: 39 livros normais
+let livrosApocrifosDropados = 0; // Total: 7 livros apócrifos
+const TOTAL_LIVROS_NORMAIS = 39;
+const TOTAL_LIVROS_APOCRIFOS = 7;
+
 // Função para embaralhar a ordem das imagens dos livros
 function embaralharLivros() {
   const boxdrag = document.getElementById('boxdrag');
@@ -250,6 +256,12 @@ function setupDropZones() {
         // Marcar que o drop foi bem-sucedido PRIMEIRO para parar onDragMove imediatamente
         dragged._dropSuccessful = true;
         
+        // Acrescentar pontuação por acerto
+        acrescentarPontuacao(true);
+        
+        // Incrementar contador de livros normais dropados
+        livrosNormaisDropados++;
+        
         // Remover imediatamente o helper
         if (dragged._dragHelper && dragged._dragHelper.parentNode) {
           dragged._dragHelper.parentNode.removeChild(dragged._dragHelper);
@@ -259,9 +271,15 @@ function setupDropZones() {
           document.removeEventListener('dragover', dragged._onDragMove);
           delete dragged._onDragMove;
         }
+        
+        // Verificar se o jogo acabou
+        verificarFimDeJogo();
       } else if (isDropIncorreto) {
         // Drop incorreto - mostrar mensagem de erro
         mostrarMensagemErro();
+        
+        // Diminuir pontuação por erro
+        acrescentarPontuacao(false);
       }
     });
   });
@@ -361,11 +379,21 @@ function setupBoxApocrifosRotation() {
       if (!livrosApocrifos.includes(livroId)) {
         // Mostrar mensagem de erro para livro não-apócrifo em box apócrifo
         mostrarMensagemErro();
+        
+        // Diminuir pontuação por erro
+        acrescentarPontuacao(false);
+        
         return; // Bloqueia o drop de livros não apócrifos
       }
       
       // Marcar que o drop foi bem-sucedido PRIMEIRO para parar onDragMove imediatamente
       dragged._dropSuccessful = true;
+      
+      // Acrescentar pontuação por acerto
+      acrescentarPontuacao(true);
+      
+      // Incrementar contador de livros apócrifos dropados
+      livrosApocrifosDropados++;
       
       // Remover imediatamente o helper
       if (dragged._dragHelper && dragged._dragHelper.parentNode) {
@@ -421,6 +449,9 @@ function setupBoxApocrifosRotation() {
           proximoBox.style.opacity = '1';
         }
       }
+      
+      // Verificar se o jogo acabou
+      verificarFimDeJogo();
     });
   });
 }
@@ -437,4 +468,48 @@ function clicarOk() {
   if (botaoOk) {
     botaoOk.style.display = "none";
   }
+}
+
+// Verificar se o jogo acabou
+function verificarFimDeJogo() {
+  console.log(`Livros normais dropados: ${livrosNormaisDropados}/${TOTAL_LIVROS_NORMAIS}`);
+  console.log(`Livros apócrifos dropados: ${livrosApocrifosDropados}/${TOTAL_LIVROS_APOCRIFOS}`);
+  
+  // Verificar se todos os livros foram dropados corretamente
+  if (livrosNormaisDropados === TOTAL_LIVROS_NORMAIS && livrosApocrifosDropados === TOTAL_LIVROS_APOCRIFOS) {
+    console.log('Fim de jogo!');
+    fimDeJogo();
+  }
+}
+
+// Função chamada quando o jogo termina
+function fimDeJogo() {
+  console.log('Executando fimDeJogo()');
+  
+  // Parar cronômetro
+  cronometro.pararCronometro();
+  
+  // Chamar função pontuacaoFinal
+  pontuacaoFinal();
+  
+  // Atualizar tempo final na mensagem
+  const tempoFinalElemento = document.getElementById('mostra-tempo-final');
+  if (tempoFinalElemento) {
+    tempoFinalElemento.textContent = cronometro.pegaRelogio();
+  }
+  
+  // Atualizar pontuação final na mensagem
+  const pontuacaoFinalElemento = document.getElementById('mostra-pontuacao-final');
+  if (pontuacaoFinalElemento) {
+    pontuacaoFinalElemento.textContent = obterPontuacao();
+  }
+  
+  // Fazer aparecer "mensagem-final"
+  const mensagemFinal = document.getElementById('mensagem-final');
+  if (mensagemFinal) {
+    mensagemFinal.style.display = 'grid';
+    mensagemFinal.style.opacity = '1';
+  }
+  
+  console.log('fimDeJogo() concluído');
 }

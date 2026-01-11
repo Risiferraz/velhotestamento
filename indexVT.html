@@ -243,15 +243,30 @@
             </div>
             <div id="Marcapontuacao">
                 <h5>PONTOS:</h5>
-                <h2 id="indicador">00</h2>
+                <h2 id="indicador">100</h2>
             </div>
             <button type="button" id="sair-salvar" onclick="clicarSair()">SALVAR E SAIR</button>
 
             <!-- MENSAGENS TEMPORÁRIAS: -->
             <img alt="Tente de novo" id="mensagem-de-erro" src="/imagens/mensagem-de-erro.png">
             <button type="button" id="ok" onclick="clicarOk()" class="efeitoflash-button">OK!</button>
+            <div id="mensagem-final">
+                <img alt="Parabéns! Fim de jogo" id="img-mensagem-final" src="imagens\mensagem-final.png">
+                <div id="pontuacao-final">
+                    <h5>SUA PONTUAÇÃO FINAL:</h5>
+                    <h2 id="mostra-pontuacao-final">0000</h2>
+                </div>
+                <div id="tempo-final">
+                    <h5>DURAÇÃO DE TEMPO:</h5>
+                    <h2 id="mostra-tempo-final">00:00</h2>
+                </div>
+                <button type="button" id="sair-jogo-finalizado">SAIR</button>
+                <button type="button" id="proxima-fase">PRÓXIMA FASE</button>
+                <!-- <a href="2fase.html" rel="next" ></a> -->
+            </div>
         </div>
     </div>
+    <script src="scripts/pontuacao.js" defer></script>
     <script src="scripts/cronometro.js" defer></script>
     <script src="scripts/scriptVT.js" defer></script>
 </body>
