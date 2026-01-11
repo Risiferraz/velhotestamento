@@ -1,11 +1,6 @@
 // Variável global para rastrear o elemento sendo arrastado
 let currentDraggedElement = null;
 
-// Variáveis para controlar timeouts da mensagem de erro
-let timeoutMensagemErro = null;
-let timeoutFadeOut = null;
-let timeoutHide = null;
-
 // Flag para controlar se a mensagem de erro já foi mostrada
 let mensagemErroJaMostrada = false;
 
@@ -57,11 +52,18 @@ function embaralharLivros() {
   window.addEventListener('DOMContentLoaded', scaleStage);
 })();
 
+// Instanciar cronômetro
+const cronometro = new Cronometro();
+
 // Embaralhar livros na entrada da página
 window.addEventListener('DOMContentLoaded', function() {
   embaralharLivros();
   setupBookDragListeners();
   setupDropZones();
+  
+  // Iniciar cronômetro
+  cronometro.iniciaCronometro();
+  setInterval(() => cronometro.atualizaCronometro(), 1000);
 });
 
 function setupBookDragListeners() {
@@ -274,40 +276,19 @@ function mostrarMensagemErro() {
   if (mensagemErroJaMostrada) return;
   
   const mensagem = document.getElementById('mensagem-de-erro');
+  const botaoOk = document.getElementById('ok');
   if (!mensagem) return;
   
   // Marcar que a mensagem já foi mostrada
   mensagemErroJaMostrada = true;
   
-  // Limpar timeouts anteriores se existirem
-  if (timeoutMensagemErro) clearTimeout(timeoutMensagemErro);
-  if (timeoutFadeOut) clearTimeout(timeoutFadeOut);
-  if (timeoutHide) clearTimeout(timeoutHide);
-  
-  // Resetar e mostrar com fade-in
-  mensagem.style.transition = 'none';
-  mensagem.style.opacity = '0';
+  // Mostrar a mensagem e o botão permanentemente
   mensagem.style.display = 'block';
+  mensagem.style.opacity = '1';
   
-  // Forçar reflow para garantir que a mudança seja aplicada
-  mensagem.offsetHeight;
-  
-  // Animar fade-in
-  timeoutMensagemErro = setTimeout(() => {
-    mensagem.style.transition = 'opacity 0.3s ease-in';
-    mensagem.style.opacity = '1';
-  }, 10);
-  
-  // Esconder após 2 segundos com fade-out
-  timeoutFadeOut = setTimeout(() => {
-    mensagem.style.transition = 'opacity 0.3s ease-out';
-    mensagem.style.opacity = '0';
-    
-    // Remover display após animação
-    timeoutHide = setTimeout(() => {
-      mensagem.style.display = 'none';
-    }, 300);
-  }, 3500);
+  if (botaoOk) {
+    botaoOk.style.display = 'block';
+  }
 }
 
 // Configurar rotação de 90 graus para livros apócrifos sobre boxapocrifos
@@ -442,4 +423,18 @@ function setupBoxApocrifosRotation() {
       }
     });
   });
+}
+
+// Ocultar mensagem de dica
+function clicarOk() {
+  const mensagemErro = document.getElementById("mensagem-de-erro");
+  const botaoOk = document.getElementById("ok");
+  
+  if (mensagemErro) {
+    mensagemErro.style.display = "none";
+  }
+  
+  if (botaoOk) {
+    botaoOk.style.display = "none";
+  }
 }

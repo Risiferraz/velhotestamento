@@ -286,7 +286,49 @@ h5 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1000;
+    z-index: 2;
     display: none;
     width: 80vw;
+}
+
+#ok {
+    width: 60px;
+    height: 60px;
+    background-color: brown;
+    position: absolute;
+    font-family: Impact, 'Arial Narrow Bold', sans-serif;
+    font-size: 1.5rem;
+    margin: 19% 12%;
+    border: outset 7px rgb(165, 168, 167);
+    border-radius: 5px;
+    z-index: 3;
+    bottom: 30%;
+    left: 56%;
+    display: none;
+}
+
+#ok:hover {
+    transform: scale(120%);
+    cursor: pointer;
+}
+
+.efeitoflash-button {
+    animation-name: efeitoflash-button;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    /*- caso você queira que o efeito se repita infinitamente*/
+}
+
+@keyframes efeitoflash-button {
+    0% {
+        background-color: brown;
+    }
+
+    50% {
+        background-color: rgb(220, 79, 8);
+    }
+
+    100% {
+        background-color: brown;
+    }
 }
