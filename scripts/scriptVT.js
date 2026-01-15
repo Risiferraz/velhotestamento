@@ -472,19 +472,14 @@ function clicarOk() {
 
 // Verificar se o jogo acabou
 function verificarFimDeJogo() {
-  console.log(`Livros normais dropados: ${livrosNormaisDropados}/${TOTAL_LIVROS_NORMAIS}`);
-  console.log(`Livros apócrifos dropados: ${livrosApocrifosDropados}/${TOTAL_LIVROS_APOCRIFOS}`);
-  
   // Verificar se todos os livros foram dropados corretamente
   if (livrosNormaisDropados === TOTAL_LIVROS_NORMAIS && livrosApocrifosDropados === TOTAL_LIVROS_APOCRIFOS) {
-    console.log('Fim de jogo!');
     fimDeJogo();
   }
 }
 
 // Função chamada quando o jogo termina
 function fimDeJogo() {
-  console.log('Executando fimDeJogo()');
   
   // Parar cronômetro
   cronometro.pararCronometro();
@@ -510,6 +505,27 @@ function fimDeJogo() {
     mensagemFinal.style.display = 'grid';
     mensagemFinal.style.opacity = '1';
   }
-  
-  console.log('fimDeJogo() concluído');
 }
+
+// Função para ir para a próxima fase
+function vaiParaProximaFase() {
+  window.location.href = "https://www.w3schools.com";
+}
+
+// Função para sair do jogo
+function sairDoJogo() {
+  window.close();
+}
+
+// Adicionar evento click aos botões
+window.addEventListener('DOMContentLoaded', function() {
+  const botaoProximaFase = document.getElementById('proxima-fase');
+  if (botaoProximaFase) {
+    botaoProximaFase.addEventListener('click', vaiParaProximaFase);
+  }
+  
+  const botaoSairJogoFinalizado = document.getElementById('sair-jogo-finalizado');
+  if (botaoSairJogoFinalizado) {
+    botaoSairJogoFinalizado.addEventListener('click', sairDoJogo);
+  }
+});

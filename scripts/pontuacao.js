@@ -37,20 +37,10 @@ function obterPontuacao() {
 }
 
 /**
- * Reinicia a pontuação para o valor inicial
- */
-function reiniciarPontuacao() {
-    pontuacao = 100;
-    atualizarExibicaoPontuacao();
-}
-
-/**
  * Função chamada ao final do jogo
  * Exibe a pontuação final no console e pode fazer outras ações
  */
 function pontuacaoFinal() {
-    console.log(`Pontuação Final: ${pontuacao}`);
-    
     // Atualizar a exibição final da pontuação
     atualizarExibicaoPontuacao();
     
