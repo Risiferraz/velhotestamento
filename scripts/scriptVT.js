@@ -114,8 +114,8 @@ function dragStart(event) {
   // Ocultar a imagem original durante o arraste
   img.style.opacity = '0';
   
-  const ghostW = 25;
-  const ghostH = 60;
+  const ghostW = 32; // tamanho do ghost personalizado
+  const ghostH = 77; // tamanho do ghost personalizado
   // 1) criar um helper visual 25x60 totalmente opaco que segue o cursor
   const helper = new Image();
   helper.src = img.src;
