@@ -282,13 +282,12 @@ h5 {
 }
 
 #mensagem-de-erro {
-    position: fixed;
-    top: 50%;
+    position: absolute;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%);
     z-index: 2;
     display: none;
-    width: 80vw;
+    width: 70%;
 }
 
 #ok {
@@ -302,8 +301,8 @@ h5 {
     border: outset 7px rgb(165, 168, 167);
     border-radius: 5px;
     z-index: 3;
-    bottom: 30%;
-    left: 56%;
+    bottom: 36%;
+    left: 57%;
     display: none;
 }
 
