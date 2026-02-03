@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amarante&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styleVT.css" />
     <link rel="stylesheet" type="text/css" href="style-media.css" />
     <title>VELHO TESTAMENTO</title>
@@ -11,6 +14,80 @@
 
 <body>
     <div id="stage">
+        <!-- PÁGINA INICIAL -->
+        <div id="pagina-inicial">
+            <header>
+                JOGO DOS LIVROS DA BÍBLIA VELHO TESTAMENTO
+            </header>
+            <h3>Nesta etapa, você terá que posicionar os livros do Velho Testamento dividindo-os
+                em cinco categorias:<br><br>
+                * Pentateuco<br>
+                * Históricos<br>
+                * Poéticos<br>
+                * Profetas Maiores<br>
+                * Profetas Menores<br>
+            </h3>
+            <p> Pegue o primeiro livro, arraste-o, e posicione-o na prateleira correspondente
+                e na ordem correta. Se você acertar o local correto o livro mudará de cor.
+                Se colocar em um lugar incorreto você poderá removê-lo dali, e tentar novamente.
+                Ao posicionar um livro, outro aparecerá no dispenser de livros. São 39 livros,
+                mais 7 livros apócrifos.
+                Vamos brincar? Tente adivinhar qual será o último livro a ser liberado.
+                Clique na seta abaixo e escolha, na lista, uma opção. Se você acertar ganhará
+                um ponto extra no final!<br> Boa sorte! Vamos lá?
+            </p>
+            <button id="selecionar-opcoes" type="button" onclick="clicarOpcoes()">ESCOLHA AQUI<br>&#9660;</button>
+            <div class="lista-de-opcoes">
+                <div class="opcoes" onclick="selecionarOpcao(this)">GÊNESIS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">ÊXODO</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">LEVÍTICO</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">NÚMEROS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">DEUTERONÔMIO</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">JOSUÉ</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">JUÍZES</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">RUTE</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">1 SAMUEL</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">2 SAMUEL</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">1 REIS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">2 REIS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">1 CRÔNICAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">2 CRÔNICAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">ESDRAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">NEEMIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">ESTER</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">JÓ</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">SALMOS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">PROVÉRBIOS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">ECLESIASTES</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">CANTARES</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">ISAÍAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">JEREMIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">LAMENTAÇÕES</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">EZEQUIEL</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">DANIEL</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">OSEIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">JOEL</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">AMÓS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">OBADIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">JONAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">MIQUÉIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">NAUM</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">HABACUQUE</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">SOFONIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">AGEU</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">ZACARIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">MALAQUIAS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">BARUQUE</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">1 MACABEUS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">2 MACABEUS</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">ECLESIÁSTICO</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">JUDITE</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">SABEDORIA</div>
+                <div class="opcoes" onclick="selecionarOpcao(this)">TOBIAS</div>
+            </div>
+            <button type="button" id="start" onclick="clicarStart()">START<br>&#9660;</button>
+        </div>
+        <!-- SEGUNDA PÁGINA - JOGO -->
         <div class="container" id="game-base">
             <div class="estante">
                 <div id="pentateuco">
@@ -168,17 +245,22 @@
                 </div>
             </div>
 
-            <div id="obs">
+            <div id="obs1">
                 <h4>O Velho Testamento <br>é dividido em cinco partes:<br><br>
                     PENTATEUCO<br>
                     LIVROS HISTÓRICOS<br>
                     LIVROS POÉTICOS<br>
                     PROFETAS MAIORES<br>
-                    PROFETAS MENORES<br><br>
+                    PROFETAS MENORES
                 </h4>
             </div>
+            <div id="obs1-media">
+                O Velho Testamento é dividido em cinco partes, retratadas nas
+            prateleiras, como você pode ver acima.
+            </div>
             <div id="boxdrag">
-                <h4>Arraste o livro abaixo e disponha-o em sua prateleira correspondente e na sequência correta.</h4>
+                <h4 id="obs2">Arraste o livro abaixo e disponha-o em sua prateleira correspondente e na sequência
+                    correta.</h4>
                 <div class="draggable" draggable="true">
                     <img alt="Gênesis" class="livro" id="Gn_drag" draggable="true" src="/livros/genesis.png">
                     <img alt="Êxodo" class="livro" id="Ex_drag" draggable="true" src="/livros/exodo.png">

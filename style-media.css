@@ -1,8 +1,29 @@
-/* Smartphones - telas de até 480px e altura acima de 811px */
+/* 1) - VERDE FLUORESCENTE - Smartphones - telas de 641 até 750px */
+@media screen and (max-width: 750px) {
 
+    .ghost-helper {
+        width: 34px;
+        height: 79px;
+    }
+}
+
+/* 2) - AZUL REAL - Smartphones - telas de 481 até 640px */
+@media screen and (max-width: 640px) {
+
+    .ghost-helper {
+        width: 27px;
+        height: 59px;
+    }
+}
+
+/* 3) - VINHO - Smartphones - telas de 376 até 480px e altura acima de 913px */
 @media screen and (max-width: 480px) {
+    #stage {
+        padding-top: 0;
+    }
+
     #pagina-inicial {
-        grid-template-rows: 19vh 31vh 39vh 11vh;
+        grid-template-rows: 19vh 31vh 37vh 13vh;
         width: 100vw;
         height: 100vh;
     }
@@ -19,7 +40,7 @@
 
     p {
         font-size: 18px;
-        padding: 3% 8%;
+        padding: 3% 7%;
         line-height: 1.4rem;
     }
 
@@ -27,8 +48,6 @@
         font-size: 19px;
         width: 35vw;
         height: 8vh;
-        padding: 4%;
-        margin: 3% auto;
     }
 
     .lista-de-opcoes {
@@ -36,12 +55,9 @@
     }
 
     #start {
-        font-size: 19px;
+        font-size: 20px;
         width: 35vw;
         height: 8vh;
-        padding: 4%;
-        margin: 3% auto;
-        align-self: start;
     }
 
     .opcoes {
@@ -52,10 +68,159 @@
         height: 5vh;
         align-items: center;
     }
+
+    /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.- */
+    .container {
+        grid-template-columns: 36vw 39vw 25vw;
+        grid-template-rows: 60vh 6vh 12vh 9vh 13vh;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .estante {
+        grid-area: 1 / 1 / span 1 / span 3;
+        grid-template-rows: 155px 76px 75px 76px 75px;
+        width: 375px;
+        margin: 0 auto;
+    }
+
+    .box {
+        width: 32px;
+        height: 48px;
+    }
+
+    #pentateuco {
+        justify-self: center;
+        margin-left: 0;
+        width: 282px;
+    }
+
+    #historicos {
+        justify-self: center;
+        margin-left: 0;
+        width: 282px;
+    }
+
+    #poeticos {
+        justify-self: center;
+        margin-left: 0;
+        width: 282px;
+    }
+
+    #pmaiores {
+        justify-self: center;
+        margin-left: 0;
+        width: 282px;
+    }
+
+    #pmenores {
+        justify-self: center;
+        margin-left: 0;
+        width: 282px;
+    }
+
+    #obs1 {
+        display: none;
+    }
+
+    #obs1-media {
+        display: block;
+        grid-area: 2 / 1 / span 1 / span 3;
+        font-size: 17px;
+        margin: 1% 1% 0 4%;
+        font-style: italic;
+    }
+
+    #boxdrag {
+        grid-area: 3 / 1 / span 3 / span 1;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: 50% 50%;
+        padding: 0;
+        margin: 1% 1% 0 5%;
+    }
+
+    #obs2 {
+        font-size: 16px;
+        margin: 5% 2% 0 11%;
+        grid-area: 1 / 1 / span 1 / span 1;
+    }
+
+    .draggable {
+        grid-area: 2 / 1 / span 1 / span 1;
+    }
+    
+    .ghost-helper {
+        width: 30px;
+        height: 62px;
+    }
+
+    #livrosapocrifos {
+        grid-area: 3 / 2 / span 3 / span 1;
+    }
+
+    #titulo-apocrifos {
+        font-size: 16px;
+        margin: 2% 6% 7% 11%;
+    }
+
+    .boxapocrifos {
+        width: 70px;
+        height: 30px;
+    }
+
+    #Marcatempo {
+        grid-area: 3 / 3 / span 1 / span 1;
+        width: 75px;
+        height: 60px;
+        font-size: 15px;
+        align-self: end;
+    }
+
+    #Marcapontuacao {
+        grid-area: 4 / 3 / span 1 / span 1;
+        width: 75px;
+        height: 60px;
+        font-size: 15px;
+        align-self: end;
+    }
+
+    #sair-salvar {
+        grid-area: 5 / 3 / span 1 / span 1;
+        width: 75px;
+        height: 75px;
+        font-size: 19px;
+    }
+
+    h5 {
+        font-size: 10px;
+        height: 16px;
+    }
+
+    #mensagem-de-erro {
+        width: 90%;
+        bottom: 0;
+    }
+
+    #ok {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        left: 74%;
+        bottom: 26%;
+        margin: 0;
+    }
+
+    #mensagem-final {
+        width: 100vw;
+        height: 100vh;
+    }
 }
 
-/* Smartphones - telas com largura de até 480px e altura de 668px até 811px */
-@media (max-width: 480px) and (max-height: 811px) {
+
+/* 4) - PÚRPURA -Smartphones - telas com largura de 376 até 480px e altura de 883px até 896px */
+@media (max-width: 480px) and (max-height: 896px) {
     #pagina-inicial {
         grid-template-rows: 18vh 31vh 39vh 12vh;
     }
@@ -77,10 +242,24 @@
     #selecionar-opcoes {
         font-size: 18px;
     }
+
+    .container {
+        grid-template-rows: 61vh 6vh 10vh 10vh 12vh;
+        grid-template-columns: 35vw 39vw 26vw;
+    }
+
+    .estante {
+        grid-template-rows: 155px 76px 75px 76px 75px;
+    }
+
+    .boxapocrifos {
+        width: 70px;
+        height: 28px;
+    }
 }
 
-/* Smartphones - telas com largura de até 480px e altura de até 667px */
-@media (max-width: 480px) and (max-height: 667px) {
+/* 5) ROSYBROWN - Smartphones - telas com largura de 376 até 480px e altura de até 882px */
+@media (max-width: 480px) and (max-height: 882px) {
     #pagina-inicial {
         grid-template-rows: 22vh 6vh 53vh 18vh;
     }
@@ -109,6 +288,298 @@
 
     #start {
         height: 12vh;
+    }
+
+    .container {
+        grid-template-rows: 64vh 11vh 10vh 15vh 0;
+    }
+
+    #obs1-media {
+        display: none;
+    }
+
+    #boxdrag {
+        grid-area: 2 / 1 / span 3 / span 1;
+    }
+
+    #livrosapocrifos {
+        grid-area: 2 / 2 / span 3 / span 1;
+    }
+
+    #titulo-apocrifos {
+        margin: 2% 0% 7% 11%;
+    }
+
+    #Marcatempo {
+        grid-area: 2 / 3 / span 1 / span 1;
+    }
+
+    #Marcapontuacao {
+        grid-area: 3 / 3 / span 1 / span 1;
+    }
+
+    #sair-salvar {
+        grid-area: 4 / 3 / span 1 / span 1;
+    }
+
+}
+
+/* 6) - AMARELO - Smartphones - telas com largura de até 375px e altura de até 812px */
+@media (max-width: 375px) and (max-height: 812px) {
+    .container {
+        grid-template-columns: 34vw 42vw 24vw;
+    }
+
+    .estante {
+        grid-template-rows: 131px 75px 74px 71px 72px;
+        background-position: bottom;
+        width: 360px;
+        height: 512px;
+    }
+
+    #pentateuco {
+        width: 275px;
+    }
+
+    #historicos {
+        width: 275px;
+    }
+
+    #poeticos {
+        width: 275px;
+    }
+
+    #pmaiores {
+        width: 275px;
+    }
+
+    #pmenores {
+        width: 275px;
+    }
+
+    #obs2 {
+        margin: 5% 2% 0 4%;
+    }
+
+    .boxapocrifos {
+        width: 65px;
+        height: 26px;
+    }
+
+    #Marcatempo {
+        width: 65px;
+        font-size: 13px;
+    }
+
+    #Marcapontuacao {
+        width: 65px;
+        font-size: 13px;
+    }
+
+    #sair-salvar {
+        font-size: 18px;
+    }
+
+}
+
+/* 7) - ROSÊ - Smartphones - telas com largura de até 375px e altura de até 761px */
+@media (max-width: 375px) and (max-height: 761px) {
+    .container {
+        grid-template-rows: 63vh 8vh 9vh 9vh 11vh;
+        grid-template-columns: 36vw 38vw 26vw;
+    }
+
+    .estante {
+        grid-template-rows: 119px 70px 68px 69px 68px;
+        width: 340px;
+        height: 480px;
+    }
+
+    #pentateuco {
+        width: 260px;
+    }
+
+    #historicos {
+        width: 260px;
+    }
+
+    #poeticos {
+        width: 260px;
+    }
+
+    #pmaiores {
+        width: 260px;
+    }
+
+    #pmenores {
+        width: 260px;
+    }
+
+    #obs1-media {
+        display: grid;
+        grid-area: 2 / 1 / span 1 / span 3;
+    }
+
+    .box {
+        height: 42px;
+    }
+
+    #obs1-media {
+        grid-area: 2 / 1 / span 1 / span 3;
+        font-size: 15px;
+        margin: 1% 1% 0 4%;
+    }
+
+    #obs2 {
+        font-size: 13px;
+        line-height: 1rem;
+        margin: 0% 4% 0 6%;
+    }
+
+    #boxdrag {
+        grid-area: 3 / 1 / span 3 / span 1;
+        position: relative;
+        bottom: 6%;
+    }
+
+    .livro {
+        width: 30px;
+    }
+
+    #titulo-apocrifos {
+        font-size: 13px;
+        line-height: 1rem;
+        margin: 0% 3% 1% 13%;
+    }
+
+    #livrosapocrifos {
+        grid-area: 3 / 2 / span 3 / span 1;
+        position: relative;
+        bottom: 5%;
+    }
+
+    .boxapocrifos {
+        width: 60px;
+        height: 35px;
+        margin-top: 5px;
+    }
+
+    h5 {
+        font-size: 9px;
+        height: 14px;
+    }
+
+    #Marcatempo {
+        grid-area: 3 / 3 / span 1 / span 1;
+        width: 58px;
+        font-size: 12px;
+        height: 52px;
+    }
+
+    #Marcapontuacao {
+        grid-area: 4 / 3 / span 1 / span 1;
+        width: 58px;
+        font-size: 12px;
+        height: 52px;
+    }
+
+    #sair-salvar {
+        grid-area: 5 / 3 / span 1 / span 1;
+        font-size: 14px;
+        width: 58px;
+        height: 60px;
+    }
+
+}
+
+/* 8) - CINZA - Smartphones - telas com largura de até 375px e altura de até 668px */
+@media (max-width: 375px) and (max-height: 668px) {
+
+    .container {
+        grid-template-rows: 70vh 9vh 9vh 12vh 0;
+    }
+
+    .estante {
+        grid-template-rows: 112px 65px 64px 65px 64px;
+        width: 320px;
+        height: 450px;
+    }
+
+    #pentateuco {
+        width: 245px;
+    }
+
+    #historicos {
+        width: 245px;
+    }
+
+    #poeticos {
+        width: 245px;
+    }
+
+    #pmaiores {
+        width: 245px;
+    }
+
+    #pmenores {
+        width: 245px;
+    }
+
+    #obs1-media {
+        display: none;
+    }
+
+    #obs2 {
+        margin: 5% 7%;
+    }
+
+    #boxdrag {
+        grid-area: 2 / 1 / span 3 / span 1;
+    }
+
+    .draggable {
+        margin: 18% auto;
+    }
+
+    .ghost-helper {
+        width: 26px;
+        height: 58px;
+    }
+    
+    .livro {
+        width: 30px;
+    }
+
+    #livrosapocrifos {
+        grid-area: 2 / 2 / span 3 / span 1;
+    }
+
+    #titulo-apocrifos {
+        margin: 0% 5% 1% 15%;
+    }
+
+    .boxapocrifos {
+        margin-top: 2px;
+    }
+
+    h5 {
+        font-size: 9px;
+        height: 14px;
+    }
+
+    #Marcatempo {
+        grid-area: 2 / 3 / span 1 / span 1;
+        width: 58px;
+        font-size: 12px;
+        height: 52px;
+    }
+
+    #Marcapontuacao {
+        grid-area: 3 / 3 / span 1 / span 1;
+    }
+
+    #sair-salvar {
+        grid-area: 4 / 3 / span 1 / span 1;
     }
 
 }
@@ -192,4 +663,3 @@
         scroll-behavior: smooth;
     }
 }
-

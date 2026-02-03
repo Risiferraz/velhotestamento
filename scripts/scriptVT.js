@@ -1,3 +1,83 @@
+// FUNÇÕES RELACIONADAS À PÁGINA INICIAL
+function clicarStart() {
+  const paginaInicial = document.getElementById('pagina-inicial');
+  const container = document.querySelector('.container');
+  if (paginaInicial) {
+    paginaInicial.style.display = 'none';
+  }
+  if (container) {
+    container.style.display = 'grid';
+  }
+}
+
+function selecionarOpcao(elementoSelecionado) { // Função para selecionar uma opção na lista de opções
+  const opcoes = document.querySelectorAll('.lista-de-opcoes .opcoes'); // Seleciona todas as opções dentro da lista de opções
+  opcoes.forEach(opcao => { // Percorre todas as opções
+    if (opcao === elementoSelecionado) { // Se(ou quando) uma opção for a selecionada
+      opcao.style.display = 'block'; // A opção selecionada é exibida
+    } else {
+      opcao.style.display = 'none'; // As outras opções são ocultadas
+    }
+  });
+  const lista = document.querySelector('.lista-de-opcoes'); // busca no HTML o elemento com a classe lista-de-opcoes e armazena na variável lista.
+  if (lista) {
+    lista.classList.remove('livro-escolhido-da-lista-de-opcoes'); // Remove antes para evitar acúmulo
+    lista.classList.add('livro-escolhido-da-lista-de-opcoes');
+    lista.style.display = 'flex'; // Sobrescreve o display: none do estado inicial
+  }
+  const botaoSelecionar = document.getElementById('selecionar-opcoes'); // busca o elemento com o id selecionar-opcoes e armazena na variável botaoSelecionar.
+  if (botaoSelecionar) {
+    botaoSelecionar.style.display = 'none'; //Se esse botão existir, ele é ocultado (display: 'none'), ou seja, deixa de aparecer na tela.
+  }
+}
+
+function clicarOpcoes() {
+  document.querySelector('.lista-de-opcoes').style.display = 'block';
+}
+
+// Função para dimensionamento proporcional de toda a área de jogo
+(function escalaDinamicaPagina() {
+  const BASE_WIDTH = 750;
+  const BASE_HEIGHT = 850;
+  const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
+  function scaleStage() {
+    // Desativa escala dinâmica em telas pequenas
+    if (window.innerWidth <= 480) {
+      const stageEl = document.getElementById('game-base');
+      const paginaInicial = document.getElementById('pagina-inicial');
+      if (stageEl) stageEl.style.transform = '';
+      if (paginaInicial) paginaInicial.style.transform = '';
+      return;
+    }
+    const stageEl = document.getElementById('game-base');
+    const stageWrapper = document.getElementById('stage');
+    if (stageEl && stageWrapper) {
+      // Usar o tamanho interno disponível do wrapper (considera padding)
+      const availableWidth = stageWrapper.clientWidth;
+      const availableHeight = stageWrapper.clientHeight;
+      const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
+      const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
+      const scaledWidth = BASE_WIDTH * scale;
+      const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
+      stageEl.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
+    }
+    // Escala dinâmica para a tela inicial
+    const paginaInicial = document.getElementById('pagina-inicial');
+    if (paginaInicial && stageWrapper) {
+      const availableWidth = stageWrapper.clientWidth;
+      const availableHeight = stageWrapper.clientHeight;
+      const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
+      const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
+      const scaledWidth = BASE_WIDTH * scale;
+      const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
+      paginaInicial.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
+      paginaInicial.style.transformOrigin = 'top left';
+    }
+  }
+  window.addEventListener('resize', scaleStage);
+  window.addEventListener('DOMContentLoaded', scaleStage);
+})();
+
 // Variável global para rastrear o elemento sendo arrastado
 let currentDraggedElement = null;
 
@@ -42,6 +122,14 @@ function embaralharLivros() {
   const BASE_HEIGHT = 850;
   const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
   function scaleStage() {
+        // Desativa escala dinâmica em telas pequenas
+    if (window.innerWidth <= 480) {
+      const stageEl = document.getElementById('game-base');
+      const paginaInicial = document.getElementById('pagina-inicial');
+      if (stageEl) stageEl.style.transform = '';
+      if (paginaInicial) paginaInicial.style.transform = '';
+      return;
+    }
     const stageEl = document.getElementById('game-base');
     const stageWrapper = document.getElementById('stage');
     if (!stageEl || !stageWrapper) return;
@@ -114,15 +202,10 @@ function dragStart(event) {
   // Ocultar a imagem original durante o arraste
   img.style.opacity = '0';
   
-  const ghostW = 32; // tamanho do ghost personalizado
-  const ghostH = 77; // tamanho do ghost personalizado
-  // 1) criar um helper visual 25x60 totalmente opaco que segue o cursor
+  // 1) criar um helper visual que segue o cursor
   const helper = new Image();
   helper.src = img.src;
-  helper.width = ghostW;
-  helper.height = ghostH;
-  helper.style.width = ghostW + 'px';
-  helper.style.height = ghostH + 'px';
+  helper.className = 'ghost-helper';
   helper.style.position = 'fixed';
   helper.style.left = '0px';
   helper.style.top = '0px';
@@ -132,6 +215,8 @@ function dragStart(event) {
   helper.style.opacity = '1';
   helper.style.transformOrigin = 'center center';
   document.body.appendChild(helper);
+  const ghostW = 32;
+  const ghostH = 77;
   const offsetX = ghostW * 0.5; // hotspot centralizado
   const offsetY = ghostH * 0.5;
   const onDragMove = (e) => {
