@@ -1,3 +1,40 @@
+// Evento para somar 10 pontos ao clicar na mensagem de acerto
+window.addEventListener('DOMContentLoaded', function() {
+  const mensagemLivro = document.getElementById('mensagem-livro-escolhido');
+  if (mensagemLivro) {
+    mensagemLivro.addEventListener('click', function() {
+      // Só permite se o nome do livro escolhido coincidir com o de ultimo-livro
+      const nomeEscolhido = document.getElementById('nome-livro-escolhido');
+      const nomeUltimo = document.getElementById('nome-ultimo-livro');
+      if (!nomeEscolhido || !nomeUltimo) return;
+      const nome1 = (nomeEscolhido.textContent || '').trim().toUpperCase();
+      const nome2 = (nomeUltimo.textContent || '').trim().toUpperCase();
+      if (nome1 && nome2 && nome1 === nome2) {
+        // Pega o elemento da pontuação final
+        const pontuacaoFinalElemento = document.getElementById('mostra-pontuacao-final');
+        if (pontuacaoFinalElemento) {
+          let valor = parseInt(pontuacaoFinalElemento.textContent, 10) || 0;
+          valor += 10;
+          pontuacaoFinalElemento.textContent = valor;
+        }
+      }
+    });
+  }
+});
+// Função para verificar se o livro escolhido é igual ao último livro sorteado
+function verificarSeAcertouLivro() {
+  const nomeEscolhido = document.getElementById('nome-livro-escolhido');
+  const nomeUltimo = document.getElementById('nome-ultimo-livro');
+  const mensagemDiv = document.getElementById('mensagem-livro-escolhido');
+  if (!nomeEscolhido || !nomeUltimo || !mensagemDiv) return;
+  const nome1 = (nomeEscolhido.textContent || '').trim().toUpperCase();
+  const nome2 = (nomeUltimo.textContent || '').trim().toUpperCase();
+  if (nome1 && nome2 && nome1 === nome2) {
+    mensagemDiv.innerHTML = 'PARABÉNS VOCÊ ACERTOU<br>CLIQUE AQUI PARA GANHAR UNS PONTOS EXTRAS.';
+  } else {
+    mensagemDiv.innerHTML = 'Você não acertou o livro.<br>Veja abaixo sua pontuação.';
+  }
+}
 // FUNÇÕES RELACIONADAS À PÁGINA INICIAL
 function clicarStart() {
   const paginaInicial = document.getElementById('pagina-inicial');
@@ -28,6 +65,12 @@ function selecionarOpcao(elementoSelecionado) { // Função para selecionar uma 
   const botaoSelecionar = document.getElementById('selecionar-opcoes'); // busca o elemento com o id selecionar-opcoes e armazena na variável botaoSelecionar.
   if (botaoSelecionar) {
     botaoSelecionar.style.display = 'none'; //Se esse botão existir, ele é ocultado (display: 'none'), ou seja, deixa de aparecer na tela.
+  }
+
+  // NOVO: Copiar nome do livro selecionado para a div #livro-escolhido
+  const nomeLivroH1 = document.getElementById('nome-livro-escolhido');
+  if (nomeLivroH1 && elementoSelecionado) {
+    nomeLivroH1.textContent = elementoSelecionado.textContent;
   }
 }
 
@@ -154,7 +197,22 @@ window.addEventListener('DOMContentLoaded', function() {
   embaralharLivros();
   setupBookDragListeners();
   setupDropZones();
-  
+
+  // Atualizar nome do último livro sorteado
+  const draggableDiv = document.querySelector('.draggable');
+  const livros = draggableDiv ? Array.from(draggableDiv.querySelectorAll('.livro')) : [];
+  if (livros.length > 0) {
+    // Agora pega o PRIMEIRO da lista
+    const primeiroLivro = livros[0];
+    const nomePrimeiroLivro = (primeiroLivro.getAttribute('alt') || primeiroLivro.textContent || '').toUpperCase();
+    // Console log do primeiro livro da lista de dragáveis
+    console.log('Primeiro livro na lista .draggable:', nomePrimeiroLivro, 'ID:', primeiroLivro.id);
+    const nomeUltimoLivroH1 = document.getElementById('nome-ultimo-livro');
+    if (nomeUltimoLivroH1) {
+      nomeUltimoLivroH1.textContent = nomePrimeiroLivro;
+    }
+  }
+
   // Iniciar cronômetro
   cronometro.iniciaCronometro();
   setInterval(() => cronometro.atualizaCronometro(), 1000);
@@ -581,27 +639,48 @@ function fimDeJogo() {
   
   // Parar cronômetro
   cronometro.pararCronometro();
-  
+
   // Chamar função pontuacaoFinal
   pontuacaoFinal();
-  
+
   // Atualizar tempo final na mensagem
   const tempoFinalElemento = document.getElementById('mostra-tempo-final');
   if (tempoFinalElemento) {
     tempoFinalElemento.textContent = cronometro.pegaRelogio();
   }
-  
+
   // Atualizar pontuação final na mensagem
   const pontuacaoFinalElemento = document.getElementById('mostra-pontuacao-final');
   if (pontuacaoFinalElemento) {
     pontuacaoFinalElemento.textContent = obterPontuacao();
   }
-  
+
   // Fazer aparecer "mensagem-final"
   const mensagemFinal = document.getElementById('mensagem-final');
   if (mensagemFinal) {
     mensagemFinal.style.display = 'grid';
     mensagemFinal.style.opacity = '1';
+
+    // Após 5 segundos, aplicar efeito piscante e mostrar mensagem de acerto/erro
+    setTimeout(function() {
+      // Chamar a função de verificação e mostrar mensagem
+      verificarSeAcertouLivro();
+
+      // Efeito piscante nas divs
+      const livroEscolhido = document.getElementById('livro-escolhido');
+      const ultimoLivro = document.getElementById('ultimo-livro');
+      const mensagemLivro = document.getElementById('mensagem-livro-escolhido');
+      if (livroEscolhido) livroEscolhido.classList.add('efeito-pisca');
+      if (ultimoLivro) ultimoLivro.classList.add('efeito-pisca');
+      if (mensagemLivro) mensagemLivro.classList.add('efeito-pisca');
+
+      // Remover o efeito após 3 segundos
+      setTimeout(function() {
+        if (livroEscolhido) livroEscolhido.classList.remove('efeito-pisca');
+        if (ultimoLivro) ultimoLivro.classList.remove('efeito-pisca');
+        if (mensagemLivro) mensagemLivro.classList.remove('efeito-pisca');
+      }, 5000); // Duração total do efeito piscante (2 segundos)
+    }, 2000); //
   }
 }
 

@@ -150,7 +150,7 @@
     .draggable {
         grid-area: 2 / 1 / span 1 / span 1;
     }
-    
+
     .ghost-helper {
         width: 30px;
         height: 62px;
@@ -213,8 +213,66 @@
     }
 
     #mensagem-final {
+        grid-template-rows: 12% 10% 10% 10% auto;
+        background-position: bottom;
         width: 100vw;
         height: 100vh;
+    }
+
+    h5 {
+        font-size: 8px;
+        height: 12px;
+    }
+
+    #livro-escolhido {
+        grid-area: 1 / 1 / span 1 / span 2;
+        width: 80%;
+        font-size: 10px;
+        left: 10%;
+    }
+
+    #ultimo-livro {
+        grid-area: 1 / 3 / span 1 / span 2;
+        width: 80%;
+        font-size: 10px;
+        right: 10%;
+    }
+
+    #mensagem-livro-escolhido {
+        grid-area: 2 / 1 / span 1 / span 4;
+        font-size: 15px;
+        padding: 1% 3%;
+        min-height: none;
+        margin: 0 5%;
+    }
+
+    #tempo-final {
+        grid-area: 3/ 1 / span 1 / span 2;
+        font-size: 10px;
+        left: 10%;
+    }
+
+    #pontuacao-final {
+        grid-area: 3 / 3 / span 1 / span 2;
+        font-size: 10px;
+        right: 10%;
+        width: auto;
+    }
+
+    #proxima-fase {
+        width: 120px;
+        padding: 8px;
+        font-size: 18px;
+        left: 10%;
+        bottom: 63%;
+    }
+
+    #sair-jogo-finalizado {
+        width: 120px;
+        padding: 8px;
+        font-size: 18px;
+        right: 10%;
+        bottom: 63%;
     }
 }
 
@@ -545,7 +603,7 @@
         width: 26px;
         height: 58px;
     }
-    
+
     .livro {
         width: 30px;
     }
