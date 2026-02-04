@@ -190,15 +190,15 @@ function dragStart(event) {
   
   currentDraggedElement = img; // Armazena referência global
   // Garante que temos um id para o drop usar
-  if (img && img.id) {
-    event.dataTransfer.setData("text/plain", img.id);
+  if (img && img.id) { // se imagem e id existirem ...
+    event.dataTransfer.setData("text/plain", img.id); // define o id da imagem como dado de transferência
   }
   // Permite movimentação e registra o elemento pai de origem para possíveis trocas
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = 'move';
   }
   img._sourceParent = img.parentElement;
-  
+  img._dropSuccessful = false; // Inicializa flag de drop bem-sucedido
   // Ocultar a imagem original durante o arraste
   img.style.opacity = '0';
   
@@ -292,20 +292,26 @@ function setupDropZones() {
   boxes.forEach(box => {
     // Necessário para que o elemento seja considerado alvo de drop
     box.addEventListener('dragover', (e) => {
+      // Se a box está bloqueada, não permite mais drop
+      if (box.classList.contains('locked-drop')) return;
       e.preventDefault();
       if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
       box.classList.add('droppable-hover');
     });
 
     box.addEventListener('dragenter', () => {
+      if (box.classList.contains('locked-drop')) return;
       box.classList.add('droppable-hover');
     });
 
     box.addEventListener('dragleave', () => {
+      if (box.classList.contains('locked-drop')) return;
       box.classList.remove('droppable-hover');
     });
 
     box.addEventListener('drop', (e) => {
+      // Se a box está bloqueada, não permite mais drop
+      if (box.classList.contains('locked-drop')) return;
       e.preventDefault();
       box.classList.remove('droppable-hover');
       const id = e.dataTransfer ? e.dataTransfer.getData('text/plain') : null;
@@ -316,37 +322,33 @@ function setupDropZones() {
       // Verificar se o livro foi colocado no lugar correto
       const boxId = box.getAttribute('data-draggable-id');
       const livroIdSemSufixo = id.replace('_drag', '');
-      
+
       // Verificar se é um livro apócrifo sendo dropado em box normal
       const isLivroApocrifo = livrosApocrifos.includes(livroIdSemSufixo);
-      
+
       // Verificar se é drop incorreto ANTES de mover
       const isDropIncorreto = (boxId !== livroIdSemSufixo) || isLivroApocrifo;
-      
-      // Evita operações redundantes
-      if (dragged.parentElement === box) return;
-
-      const sourceParent = dragged._sourceParent || dragged.parentElement;
-      const existing = box.querySelector('.livro');
 
       // Se já houver um livro na box alvo e não for o mesmo, faz swap: devolve o existente para a origem
+      const existing = box.querySelector('.livro');
+      const sourceParent = dragged._sourceParent;
       if (existing && existing !== dragged) {
         if (sourceParent) sourceParent.appendChild(existing);
       }
 
       // Move o livro arrastado para a box alvo
       box.appendChild(dragged);
-      
+
       if (boxId === livroIdSemSufixo) {
         // Marcar que o drop foi bem-sucedido PRIMEIRO para parar onDragMove imediatamente
         dragged._dropSuccessful = true;
-        
+
         // Acrescentar pontuação por acerto
         acrescentarPontuacao(true);
-        
+
         // Incrementar contador de livros normais dropados
         livrosNormaisDropados++;
-        
+
         // Remover imediatamente o helper
         if (dragged._dragHelper && dragged._dragHelper.parentNode) {
           dragged._dragHelper.parentNode.removeChild(dragged._dragHelper);
@@ -356,13 +358,16 @@ function setupDropZones() {
           document.removeEventListener('dragover', dragged._onDragMove);
           delete dragged._onDragMove;
         }
-        
+
+        // Bloquear mais drops nesta box
+        box.classList.add('locked-drop');
+
         // Verificar se o jogo acabou
         verificarFimDeJogo();
       } else if (isDropIncorreto) {
         // Drop incorreto - mostrar mensagem de erro
         mostrarMensagemErro();
-        
+
         // Diminuir pontuação por erro
         acrescentarPontuacao(false);
       }
@@ -401,24 +406,26 @@ function setupBoxApocrifosRotation() {
   
   boxesApocrifos.forEach(boxApocrifo => {
     boxApocrifo.addEventListener('dragover', (e) => {
+      // Se a box está bloqueada, não permite mais drop
+      if (boxApocrifo.classList.contains('locked-drop')) return;
       // Permitir drop apenas no próximo box disponível
       const boxId = boxApocrifo.getAttribute('id');
       const boxNumber = parseInt(boxId.replace('boxapocrifo', ''));
-      
+
       if (boxNumber !== proximoBoxApocrifo) {
         if (e.dataTransfer) e.dataTransfer.dropEffect = 'none';
         return;
       }
-      
+
       // Usar o elemento arrastado armazenado globalmente
       if (currentDraggedElement) {
         const livroId = currentDraggedElement.id.replace('_drag', '');
-        
+
         // Permitir drop apenas se for um livro apócrifo
         if (livrosApocrifos.includes(livroId)) {
           e.preventDefault();
           if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
-          
+
           if (currentDraggedElement._dragHelper) {
             // Aplicar rotação de 90 graus no HELPER (imagem que segue o cursor)
             currentDraggedElement._dragHelper.style.transform = 'rotate(90deg)';
@@ -428,11 +435,12 @@ function setupBoxApocrifosRotation() {
           if (e.dataTransfer) e.dataTransfer.dropEffect = 'none';
         }
       } else {
-        e.preventDefault();
+        e.preventDefault(); // Permitir dragover mesmo sem elemento (precaução)
       }
     });
-    
+
     boxApocrifo.addEventListener('dragleave', (e) => {
+      if (boxApocrifo.classList.contains('locked-drop')) return;
       // Remover rotação quando sair do box apócrifo
       if (currentDraggedElement && currentDraggedElement._dragHelper) {
         const livroId = currentDraggedElement.id.replace('_drag', '');
@@ -441,45 +449,47 @@ function setupBoxApocrifosRotation() {
         }
       }
     });
-    
-    boxApocrifo.addEventListener('drop', (e) => {
+
+    boxApocrifo.addEventListener('drop', (e) => { // Evento drop específico para boxapocrifos
+      // Se a box está bloqueada, não permite mais drop
+      if (boxApocrifo.classList.contains('locked-drop')) return;
       e.preventDefault();
-      
+
       // Permitir drop apenas no próximo box disponível
       const boxId = boxApocrifo.getAttribute('id');
       const boxNumber = parseInt(boxId.replace('boxapocrifo', ''));
-      
+
       if (boxNumber !== proximoBoxApocrifo) {
         return;
       }
-      
+
       const id = e.dataTransfer ? e.dataTransfer.getData('text/plain') : null;
       if (!id) return;
       const dragged = document.getElementById(id);
       if (!dragged) return;
-      
+
       const livroId = id.replace('_drag', '');
-      
+
       // Apenas permitir drop se for um livro apócrifo
       if (!livrosApocrifos.includes(livroId)) {
         // Mostrar mensagem de erro para livro não-apócrifo em box apócrifo
         mostrarMensagemErro();
-        
+
         // Diminuir pontuação por erro
         acrescentarPontuacao(false);
-        
+
         return; // Bloqueia o drop de livros não apócrifos
       }
-      
+
       // Marcar que o drop foi bem-sucedido PRIMEIRO para parar onDragMove imediatamente
       dragged._dropSuccessful = true;
-      
+
       // Acrescentar pontuação por acerto
       acrescentarPontuacao(true);
-      
+
       // Incrementar contador de livros apócrifos dropados
       livrosApocrifosDropados++;
-      
+
       // Remover imediatamente o helper
       if (dragged._dragHelper && dragged._dragHelper.parentNode) {
         dragged._dragHelper.parentNode.removeChild(dragged._dragHelper);
@@ -489,7 +499,7 @@ function setupBoxApocrifosRotation() {
         document.removeEventListener('dragover', dragged._onDragMove);
         delete dragged._onDragMove;
       }
-      
+
       // Mapeamento de IDs para nomes de arquivos
       const apocrifosMap = {
         '1Mc': '1macabeus',
@@ -500,10 +510,10 @@ function setupBoxApocrifosRotation() {
         'Sb': 'sabedoria',
         'Tb': 'tobias'
       };
-      
+
       // Ocultar a imagem draggable
       dragged.style.display = 'none';
-      
+
       // Criar e inserir a imagem correspondente da pasta imagens
       const nomeArquivo = apocrifosMap[livroId];
       if (nomeArquivo) {
@@ -520,13 +530,16 @@ function setupBoxApocrifosRotation() {
         imgBox.style.zIndex = '1';
         imgBox.setAttribute('draggable', 'false');
         imgBox.style.pointerEvents = 'none';
-        
+
         boxApocrifo.appendChild(imgBox);
       }
-      
+
+      // Bloquear mais drops nesta box apócrifa
+      boxApocrifo.classList.add('locked-drop');
+
       // Ativar o próximo box (decrementar)
       proximoBoxApocrifo--;
-      
+
       // Se ainda há boxes disponíveis, tornar o próximo visível (100% opacidade)
       if (proximoBoxApocrifo >= 1) {
         const proximoBox = document.getElementById(`boxapocrifo${proximoBoxApocrifo}`);
@@ -534,7 +547,7 @@ function setupBoxApocrifosRotation() {
           proximoBox.style.opacity = '1';
         }
       }
-      
+
       // Verificar se o jogo acabou
       verificarFimDeJogo();
     });
