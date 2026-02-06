@@ -516,6 +516,8 @@ h5 {
 }
 
 #mensagem-livro-escolhido {
+    transition: transform 0.2s, background 0.2s, color 0.2s;
+    cursor: pointer;
     grid-area: 3 / 1 / span 1 / span 4;
     background: rgb(182, 114, 13);
     padding: 1% 3%;
@@ -529,6 +531,16 @@ h5 {
     display: flex;
 }
 
+#mensagem-livro-escolhido:hover {
+    transform: scale(0.95);
+}
+
+#mensagem-livro-escolhido.clicado {
+    background: #c2592c;
+    color: #fff;
+    pointer-events: none;
+}
+
 #tempo-final {
     grid-area: 4 / 1 / span 1 / span 2;
     background: rgb(182, 114, 13);
@@ -540,6 +552,7 @@ h5 {
     border: outset 5px rgb(252, 237, 177);
     position: absolute;
     left: 7%;
+    bottom: 0;
 }
 
 #tempo-final h5 {
@@ -563,6 +576,7 @@ h5 {
     border: outset 5px rgb(252, 237, 177);
     position: absolute;
     right: 7%;
+    bottom: 0;
 }
 
 #pontuacao-final h5 {

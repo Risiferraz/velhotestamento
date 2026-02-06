@@ -2,7 +2,12 @@
 window.addEventListener('DOMContentLoaded', function() {
   const mensagemLivro = document.getElementById('mensagem-livro-escolhido');
   if (mensagemLivro) {
-    mensagemLivro.addEventListener('click', function() {
+    mensagemLivro.style.cursor = 'pointer';
+    let clicado = false;
+    mensagemLivro.addEventListener('click', function handler() {
+      if (clicado) return;
+      clicado = true;
+      mensagemLivro.classList.add('clicado');
       // Só permite se o nome do livro escolhido coincidir com o de ultimo-livro
       const nomeEscolhido = document.getElementById('nome-livro-escolhido');
       const nomeUltimo = document.getElementById('nome-ultimo-livro');
@@ -18,6 +23,10 @@ window.addEventListener('DOMContentLoaded', function() {
           pontuacaoFinalElemento.textContent = valor;
         }
       }
+      // Troca o texto da div pelo texto solicitado
+      mensagemLivro.innerHTML = 'Veja abaixo sua pontuação.';
+      // Remove o handler para garantir apenas um clique
+      mensagemLivro.removeEventListener('click', handler);
     });
   }
 });
@@ -680,7 +689,7 @@ function fimDeJogo() {
         if (ultimoLivro) ultimoLivro.classList.remove('efeito-pisca');
         if (mensagemLivro) mensagemLivro.classList.remove('efeito-pisca');
       }, 5000); // Duração total do efeito piscante (2 segundos)
-    }, 2000); //
+    }, 1500); // Aguardar 1.5 segundos antes de iniciar o efeito piscante
   }
 }
 
