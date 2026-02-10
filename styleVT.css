@@ -1,18 +1,3 @@
-/* Efeito piscante para livro-escolhido e ultimo-livro */
-.efeito-pisca {
-    animation: piscar 0.5s alternate 10;
-}
-
-@keyframes piscar {
-    from {
-        filter: brightness(1);
-    }
-
-    to {
-        filter: brightness(2.5);
-    }
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -636,7 +621,16 @@ h5 {
     cursor: pointer;
 }
 
-.ghost-helper {
-    width: 36px;
-    height: 90px;
+.efeito-pisca {
+    animation: piscar 0.5s alternate 10;
+}
+
+@keyframes piscar {
+    from {
+        filter: brightness(1);
+    }
+
+    to {
+        filter: brightness(2.5);
+    }
 }

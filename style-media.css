@@ -269,8 +269,8 @@
 
     #proxima-fase {
         grid-area: 5 / 1 / span 1 / span 2;
-        width: 80px;
-        padding: 8px;
+        width: 85px;
+        padding: 2%;
         font-size: 18px;
         left: 10%;
         bottom: 60%;
@@ -278,8 +278,8 @@
 
     #sair-jogo-finalizado {
         grid-area: 5 / 3 / span 1 / span 2;
-        width: 80px;
-        padding: 8px;
+        width: 85px;
+        padding: 2%;
         font-size: 18px;
         right: 10%;
         bottom: 60%;

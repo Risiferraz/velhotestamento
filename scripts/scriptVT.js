@@ -1,5 +1,5 @@
 // Evento para somar 10 pontos ao clicar na mensagem de acerto
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
   const mensagemLivro = document.getElementById('mensagem-livro-escolhido');
   if (mensagemLivro) {
     mensagemLivro.style.cursor = 'pointer';
@@ -18,13 +18,25 @@ window.addEventListener('DOMContentLoaded', function() {
         // Pega o elemento da pontuação final
         const pontuacaoFinalElemento = document.getElementById('mostra-pontuacao-final');
         if (pontuacaoFinalElemento) {
-          let valor = parseInt(pontuacaoFinalElemento.textContent, 10) || 0;
-          valor += 10;
-          pontuacaoFinalElemento.textContent = valor;
+          let valor = parseFloat(pontuacaoFinalElemento.textContent.replace(',', '.')) || 0;
+          console.log('[Antes do acréscimo] Pontuação atual:', valor);
+          valor += 1.00;
+          // Garante sempre duas casas decimais
+          pontuacaoFinalElemento.textContent = valor.toFixed(2).replace('.', ',');
+          console.log('[Depois do acréscimo] Nova pontuação:', valor.toFixed(2));
         }
       }
       // Troca o texto da div pelo texto solicitado
       mensagemLivro.innerHTML = 'Veja abaixo sua pontuação.';
+      // Após 5 segundos, faz a div desaparecer suavemente
+      setTimeout(() => {
+        mensagemLivro.style.transition = 'opacity 1s';
+        mensagemLivro.style.opacity = '0';
+        // Opcional: após o fade, pode ocultar completamente
+        setTimeout(() => {
+          mensagemLivro.style.display = 'none';
+        }, 1000);
+      }, 5000);
       // Remove o handler para garantir apenas um clique
       mensagemLivro.removeEventListener('click', handler);
     });
@@ -150,9 +162,9 @@ function embaralharLivros() {
   const boxdrag = document.getElementById('boxdrag');
   const draggableDiv = boxdrag.querySelector('.draggable');
   if (!draggableDiv) return;
-  
+
   const books = Array.from(draggableDiv.querySelectorAll('.livro'));
-  
+
   // Fisher-Yates shuffle algorithm
   for (let i = books.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -160,21 +172,22 @@ function embaralharLivros() {
     books[i] = books[j];
     books[j] = temp;
   }
-  
+
   // Remover todas as imagens
   books.forEach(book => book.remove());
-  
+
   // Reinseri-las na ordem embaralhada
   books.forEach(book => draggableDiv.appendChild(book));
 }
 
 // Proportional scaling of the entire game area
-(function escalaDinamicaPagina() {
+// Proportional scaling of the game base only
+(function escalaDinamicaGameBase() {
   const BASE_WIDTH = 750;
   const BASE_HEIGHT = 850;
   const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
-  function scaleStage() {
-        // Desativa escala dinâmica em telas pequenas
+  function scaleStageGameBase() {
+    // Desativa escala dinâmica em telas pequenas
     if (window.innerWidth <= 480) {
       const stageEl = document.getElementById('game-base');
       const paginaInicial = document.getElementById('pagina-inicial');
@@ -194,15 +207,14 @@ function embaralharLivros() {
     const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
     stageEl.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
   }
-  window.addEventListener('resize', scaleStage);
-  window.addEventListener('DOMContentLoaded', scaleStage);
+  window.addEventListener('resize', scaleStageGameBase);
+  window.addEventListener('DOMContentLoaded', scaleStageGameBase);
 })();
 
 // Instanciar cronômetro
 const cronometro = new Cronometro();
-
 // Embaralhar livros na entrada da página
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
   embaralharLivros();
   setupBookDragListeners();
   setupDropZones();
@@ -221,21 +233,18 @@ window.addEventListener('DOMContentLoaded', function() {
       nomeUltimoLivroH1.textContent = nomePrimeiroLivro;
     }
   }
-
   // Iniciar cronômetro
   cronometro.iniciaCronometro();
   setInterval(() => cronometro.atualizaCronometro(), 1000);
 });
 
-function setupBookDragListeners() {
-  // Adicionar listeners nas imagens .livro
+function setupBookDragListeners() {  // Adicionar listeners nas imagens .livro
   const bookImages = document.querySelectorAll(".livro");
   bookImages.forEach(book => {
-    book.addEventListener("dragstart", dragStart);
-    book.addEventListener("dragend", dragEnd);
+    book.addEventListener("dragstart", dragStart); // Adiciona o evento dragstart para iniciar o arraste
+    book.addEventListener("dragend", dragEnd); // Adiciona o evento dragend para finalizar o arraste
   });
-  
-  // Garantir que imagens box-livro não sejam arrastáveis
+
   const boxLivros = document.querySelectorAll(".box-livro");
   boxLivros.forEach(boxLivro => {
     boxLivro.setAttribute("draggable", "false");
@@ -243,18 +252,13 @@ function setupBookDragListeners() {
   });
 }
 
-// (removida) preencherBoxesComLivros: agora as imagens já estão dentro das boxes no HTML
-
-// Define a drag image de 25x60px e hotspot ~no canto inferior direito
 function dragStart(event) {
   const img = event.target;
-  
-  // Apenas permitir drag de imagens com classe "livro"
   if (!img.classList.contains('livro')) {
-    event.preventDefault();
+    event.preventDefault();   // Apenas permite drag de imagens com classe "livro"
     return;
   }
-  
+
   currentDraggedElement = img; // Armazena referência global
   // Garante que temos um id para o drop usar
   if (img && img.id) { // se imagem e id existirem ...
@@ -268,7 +272,7 @@ function dragStart(event) {
   img._dropSuccessful = false; // Inicializa flag de drop bem-sucedido
   // Ocultar a imagem original durante o arraste
   img.style.opacity = '0';
-  
+
   // 1) criar um helper visual que segue o cursor
   const helper = new Image();
   helper.src = img.src;
@@ -307,10 +311,10 @@ function dragStart(event) {
 function dragEnd(event) {
   const img = event.target;
   currentDraggedElement = null; // Limpa referência global
-  
+
   // Restaurar a opacidade da imagem original
   if (img) img.style.opacity = '1';
-  
+
   // Só limpar o helper se não foi um drop bem-sucedido (já foi removido no evento drop)
   if (img && !img._dropSuccessful) {
     if (img._dragHelper) {
@@ -322,26 +326,26 @@ function dragEnd(event) {
       delete img._onDragMove;
     }
   }
-  
+
   // Limpar a flag de drop bem-sucedido
   if (img && img._dropSuccessful) {
     delete img._dropSuccessful;
   }
-  
+
   // Verificar se o livro foi depositado no box correto
   if (img && img.parentElement && img.parentElement.classList.contains('box')) {
     const box = img.parentElement;
     const boxId = box.getAttribute('data-draggable-id');
     const livroId = img.id;
-    
+
     // Remover o sufixo "_drag" do ID do livro para comparar com o ID do box
     const livroIdSemSufixo = livroId.replace('_drag', '');
-    
+
     // Se o id do livro (sem "_drag") corresponde ao id do box
     if (boxId === livroIdSemSufixo) {
       // Ocultar a imagem do livro arrastável
       img.style.display = 'none';
-      
+
       // Mostrar o box-livro correspondente
       const boxLivro = box.querySelector('.box-livro');
       if (boxLivro) {
@@ -355,7 +359,7 @@ function dragEnd(event) {
 function setupDropZones() {
   const boxes = document.querySelectorAll('.box');
   const livrosApocrifos = ['1Mc', '2Mc', 'Br', 'Ecl', 'Jd', 'Sb', 'Tb'];
-  
+
   boxes.forEach(box => {
     // Necessário para que o elemento seja considerado alvo de drop
     box.addEventListener('dragover', (e) => {
@@ -440,7 +444,7 @@ function setupDropZones() {
       }
     });
   });
-  
+
   // Evento especial para boxapocrifos
   setupBoxApocrifosRotation();
 }
@@ -449,18 +453,18 @@ function setupDropZones() {
 function mostrarMensagemErro() {
   // Só mostrar se for a primeira vez
   if (mensagemErroJaMostrada) return;
-  
+
   const mensagem = document.getElementById('mensagem-de-erro');
   const botaoOk = document.getElementById('ok');
   if (!mensagem) return;
-  
+
   // Marcar que a mensagem já foi mostrada
   mensagemErroJaMostrada = true;
-  
+
   // Mostrar a mensagem e o botão permanentemente
   mensagem.style.display = 'block';
   mensagem.style.opacity = '1';
-  
+
   if (botaoOk) {
     botaoOk.style.display = 'block';
   }
@@ -470,7 +474,7 @@ function mostrarMensagemErro() {
 function setupBoxApocrifosRotation() {
   const boxesApocrifos = document.querySelectorAll('.boxapocrifos');
   const livrosApocrifos = ['1Mc', '2Mc', 'Br', 'Ecl', 'Jd', 'Sb', 'Tb'];
-  
+
   boxesApocrifos.forEach(boxApocrifo => {
     boxApocrifo.addEventListener('dragover', (e) => {
       // Se a box está bloqueada, não permite mais drop
@@ -625,66 +629,95 @@ function setupBoxApocrifosRotation() {
 function clicarOk() {
   const mensagemErro = document.getElementById("mensagem-de-erro");
   const botaoOk = document.getElementById("ok");
-  
+
   if (mensagemErro) {
     mensagemErro.style.display = "none";
   }
-  
+
   if (botaoOk) {
     botaoOk.style.display = "none";
   }
 }
 
-// Verificar se o jogo acabou
-function verificarFimDeJogo() {
-  // Verificar se todos os livros foram dropados corretamente
+function verificarFimDeJogo() {  // Verificar se todos os livros foram dropados corretamente
   if (livrosNormaisDropados === TOTAL_LIVROS_NORMAIS && livrosApocrifosDropados === TOTAL_LIVROS_APOCRIFOS) {
     fimDeJogo();
   }
 }
 
-// Função chamada quando o jogo termina
 function fimDeJogo() {
-  
-  // Parar cronômetro
-  cronometro.pararCronometro();
+  cronometro.pararCronometro();   // Parar cronômetro
+  pontuacaoFinal(); // Chamar função pontuacaoFinal
+  acrescerPontuacaoTempo();
+  function acrescerPontuacaoTempo() {
+    // 1. Pegar número do indicador (ou marca-pontuacao)
+    let indicadorNum = 0;
+    const indicadorElemento = document.getElementById("indicador");
+    if (indicadorElemento) {
+      indicadorNum = parseFloat(indicadorElemento.textContent.replace(',', '.')) || 0;
+    } else {
+      // Tentar pegar de marca-pontuacao se não achar indicador
+      const marcaPontuacao = document.getElementById("marca-pontuacao");
+      if (marcaPontuacao) {
+        indicadorNum = parseFloat(marcaPontuacao.textContent.replace(',', '.')) || 0;
+      }
+    }
 
-  // Chamar função pontuacaoFinal
-  pontuacaoFinal();
+    // 2. Pegar número do cronômetro e transformar em m,ss (float)
+    let tempoStr = cronometro.pegaRelogio();
+    let tempoFloat = 0;
+    if (tempoStr) {
+      let partes = tempoStr.split(":");
+      if (partes.length === 2) {
+        // mm:ss
+        let min = parseInt(partes[0], 10);
+        let seg = parseInt(partes[1], 10);
+        tempoFloat = parseFloat(min + "." + (seg < 10 ? "0" + seg : seg));
+      } else if (partes.length === 3) {
+        // hh:mm:ss (ignorar horas, usar só mm:ss)
+        let min = parseInt(partes[1], 10);
+        let seg = parseInt(partes[2], 10);
+        tempoFloat = parseFloat(min + "." + (seg < 10 ? "0" + seg : seg));
+      }
+    }
 
-  // Atualizar tempo final na mensagem
+    // 3. Subtrair tempoFloat de indicadorNum
+    let resultado = +(indicadorNum - tempoFloat).toFixed(2);
+
+    // Log explicando a operação matemática
+    console.log(
+      `[Pontuação Tempo] indicador: ${indicadorNum}, tempo (m,ss): ${tempoFloat}, operação: ${indicadorNum} - ${tempoFloat} = ${resultado}`
+    );
+
+    // Transferir resultado para mostra-pontuacao-final
+    const pontuacaoFinalElemento = document.getElementById("mostra-pontuacao-final");
+    if (pontuacaoFinalElemento) {
+      pontuacaoFinalElemento.textContent = resultado;
+    }
+  }
+
   const tempoFinalElemento = document.getElementById('mostra-tempo-final');
   if (tempoFinalElemento) {
     tempoFinalElemento.textContent = cronometro.pegaRelogio();
   }
 
-  // Atualizar pontuação final na mensagem
-  const pontuacaoFinalElemento = document.getElementById('mostra-pontuacao-final');
-  if (pontuacaoFinalElemento) {
-    pontuacaoFinalElemento.textContent = obterPontuacao();
-  }
-
-  // Fazer aparecer "mensagem-final"
-  const mensagemFinal = document.getElementById('mensagem-final');
-  if (mensagemFinal) {
-    mensagemFinal.style.display = 'grid';
+  const mensagemFinal = document.getElementById('mensagem-final'); // Seleciona a div da mensagem final
+  if (mensagemFinal) { // Se a div existir ...
+    mensagemFinal.style.display = 'grid'; // Exibe a mensagem final (grid para centralizar)
     mensagemFinal.style.opacity = '1';
 
-    // Após 5 segundos, aplicar efeito piscante e mostrar mensagem de acerto/erro
-    setTimeout(function() {
-      // Chamar a função de verificação e mostrar mensagem
-      verificarSeAcertouLivro();
+    setTimeout(function () {  // Após 5 segundos, aplicar efeito piscante e mostrar mensagem de acerto/erro
+      verificarSeAcertouLivro();  // Chamar a função de verificação e mostrar mensagem
 
-      // Efeito piscante nas divs
-      const livroEscolhido = document.getElementById('livro-escolhido');
-      const ultimoLivro = document.getElementById('ultimo-livro');
-      const mensagemLivro = document.getElementById('mensagem-livro-escolhido');
-      if (livroEscolhido) livroEscolhido.classList.add('efeito-pisca');
-      if (ultimoLivro) ultimoLivro.classList.add('efeito-pisca');
-      if (mensagemLivro) mensagemLivro.classList.add('efeito-pisca');
+      const livroEscolhido = document.getElementById('livro-escolhido'); // Seleciona a div do livro escolhido
+      const ultimoLivro = document.getElementById('ultimo-livro'); // Seleciona a div do último livro sorteado
+      const mensagemLivro = document.getElementById('mensagem-livro-escolhido'); // Seleciona a div da mensagem de acerto/erro
+      if (livroEscolhido) livroEscolhido.classList.add('efeito-pisca'); // Aplica classe de efeito piscante no livro escolhido
+      if (ultimoLivro) ultimoLivro.classList.add('efeito-pisca'); // Aplica classe de efeito piscante no último livro sorteado
+      if (mensagemLivro) mensagemLivro.classList.add('efeito-pisca'); // Aplica classe de efeito piscante na mensagem de acerto/erro
 
       // Remover o efeito após 3 segundos
-      setTimeout(function() {
+      setTimeout(function () {
         if (livroEscolhido) livroEscolhido.classList.remove('efeito-pisca');
         if (ultimoLivro) ultimoLivro.classList.remove('efeito-pisca');
         if (mensagemLivro) mensagemLivro.classList.remove('efeito-pisca');
@@ -704,12 +737,12 @@ function sairDoJogo() {
 }
 
 // Adicionar evento click aos botões
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
   const botaoProximaFase = document.getElementById('proxima-fase');
   if (botaoProximaFase) {
     botaoProximaFase.addEventListener('click', vaiParaProximaFase);
   }
-  
+
   const botaoSairJogoFinalizado = document.getElementById('sair-jogo-finalizado');
   if (botaoSairJogoFinalizado) {
     botaoSairJogoFinalizado.addEventListener('click', sairDoJogo);
