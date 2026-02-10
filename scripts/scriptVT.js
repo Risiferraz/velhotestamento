@@ -1,62 +1,6 @@
-// Evento para somar 10 pontos ao clicar na mensagem de acerto
-window.addEventListener('DOMContentLoaded', function () {
-  const mensagemLivro = document.getElementById('mensagem-livro-escolhido');
-  if (mensagemLivro) {
-    mensagemLivro.style.cursor = 'pointer';
-    let clicado = false;
-    mensagemLivro.addEventListener('click', function handler() {
-      if (clicado) return;
-      clicado = true;
-      mensagemLivro.classList.add('clicado');
-      // Só permite se o nome do livro escolhido coincidir com o de ultimo-livro
-      const nomeEscolhido = document.getElementById('nome-livro-escolhido');
-      const nomeUltimo = document.getElementById('nome-ultimo-livro');
-      if (!nomeEscolhido || !nomeUltimo) return;
-      const nome1 = (nomeEscolhido.textContent || '').trim().toUpperCase();
-      const nome2 = (nomeUltimo.textContent || '').trim().toUpperCase();
-      if (nome1 && nome2 && nome1 === nome2) {
-        // Pega o elemento da pontuação final
-        const pontuacaoFinalElemento = document.getElementById('mostra-pontuacao-final');
-        if (pontuacaoFinalElemento) {
-          let valor = parseFloat(pontuacaoFinalElemento.textContent.replace(',', '.')) || 0;
-          console.log('[Antes do acréscimo] Pontuação atual:', valor);
-          valor += 1.00;
-          // Garante sempre duas casas decimais
-          pontuacaoFinalElemento.textContent = valor.toFixed(2).replace('.', ',');
-          console.log('[Depois do acréscimo] Nova pontuação:', valor.toFixed(2));
-        }
-      }
-      // Troca o texto da div pelo texto solicitado
-      mensagemLivro.innerHTML = 'Veja abaixo sua pontuação.';
-      // Após 5 segundos, faz a div desaparecer suavemente
-      setTimeout(() => {
-        mensagemLivro.style.transition = 'opacity 1s';
-        mensagemLivro.style.opacity = '0';
-        // Opcional: após o fade, pode ocultar completamente
-        setTimeout(() => {
-          mensagemLivro.style.display = 'none';
-        }, 1000);
-      }, 5000);
-      // Remove o handler para garantir apenas um clique
-      mensagemLivro.removeEventListener('click', handler);
-    });
-  }
-});
-// Função para verificar se o livro escolhido é igual ao último livro sorteado
-function verificarSeAcertouLivro() {
-  const nomeEscolhido = document.getElementById('nome-livro-escolhido');
-  const nomeUltimo = document.getElementById('nome-ultimo-livro');
-  const mensagemDiv = document.getElementById('mensagem-livro-escolhido');
-  if (!nomeEscolhido || !nomeUltimo || !mensagemDiv) return;
-  const nome1 = (nomeEscolhido.textContent || '').trim().toUpperCase();
-  const nome2 = (nomeUltimo.textContent || '').trim().toUpperCase();
-  if (nome1 && nome2 && nome1 === nome2) {
-    mensagemDiv.innerHTML = 'PARABÉNS VOCÊ ACERTOU<br>CLIQUE AQUI PARA GANHAR UNS PONTOS EXTRAS.';
-  } else {
-    mensagemDiv.innerHTML = 'Você não acertou o livro.<br>Veja abaixo sua pontuação.';
-  }
-}
-// FUNÇÕES RELACIONADAS À PÁGINA INICIAL
+
+// --- FUNÇÕES DA PRIMEIRA PÁGINA E INICIALIZAÇÃO ---
+
 function clicarStart() {
   const paginaInicial = document.getElementById('pagina-inicial');
   const container = document.querySelector('.container');
@@ -68,27 +12,25 @@ function clicarStart() {
   }
 }
 
-function selecionarOpcao(elementoSelecionado) { // Função para selecionar uma opção na lista de opções
-  const opcoes = document.querySelectorAll('.lista-de-opcoes .opcoes'); // Seleciona todas as opções dentro da lista de opções
-  opcoes.forEach(opcao => { // Percorre todas as opções
-    if (opcao === elementoSelecionado) { // Se(ou quando) uma opção for a selecionada
-      opcao.style.display = 'block'; // A opção selecionada é exibida
+function selecionarOpcao(elementoSelecionado) {
+  const opcoes = document.querySelectorAll('.lista-de-opcoes .opcoes');
+  opcoes.forEach(opcao => {
+    if (opcao === elementoSelecionado) {
+      opcao.style.display = 'block';
     } else {
-      opcao.style.display = 'none'; // As outras opções são ocultadas
+      opcao.style.display = 'none';
     }
   });
-  const lista = document.querySelector('.lista-de-opcoes'); // busca no HTML o elemento com a classe lista-de-opcoes e armazena na variável lista.
+  const lista = document.querySelector('.lista-de-opcoes');
   if (lista) {
-    lista.classList.remove('livro-escolhido-da-lista-de-opcoes'); // Remove antes para evitar acúmulo
+    lista.classList.remove('livro-escolhido-da-lista-de-opcoes');
     lista.classList.add('livro-escolhido-da-lista-de-opcoes');
-    lista.style.display = 'flex'; // Sobrescreve o display: none do estado inicial
+    lista.style.display = 'flex';
   }
-  const botaoSelecionar = document.getElementById('selecionar-opcoes'); // busca o elemento com o id selecionar-opcoes e armazena na variável botaoSelecionar.
+  const botaoSelecionar = document.getElementById('selecionar-opcoes');
   if (botaoSelecionar) {
-    botaoSelecionar.style.display = 'none'; //Se esse botão existir, ele é ocultado (display: 'none'), ou seja, deixa de aparecer na tela.
+    botaoSelecionar.style.display = 'none';
   }
-
-  // NOVO: Copiar nome do livro selecionado para a div #livro-escolhido
   const nomeLivroH1 = document.getElementById('nome-livro-escolhido');
   if (nomeLivroH1 && elementoSelecionado) {
     nomeLivroH1.textContent = elementoSelecionado.textContent;
@@ -99,48 +41,43 @@ function clicarOpcoes() {
   document.querySelector('.lista-de-opcoes').style.display = 'block';
 }
 
-// Função para dimensionamento proporcional de toda a área de jogo
-(function escalaDinamicaPagina() {
-  const BASE_WIDTH = 750;
-  const BASE_HEIGHT = 850;
-  const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
-  function scaleStage() {
-    // Desativa escala dinâmica em telas pequenas
-    if (window.innerWidth <= 480) {
-      const stageEl = document.getElementById('game-base');
-      const paginaInicial = document.getElementById('pagina-inicial');
-      if (stageEl) stageEl.style.transform = '';
-      if (paginaInicial) paginaInicial.style.transform = '';
-      return;
-    }
-    const stageEl = document.getElementById('game-base');
-    const stageWrapper = document.getElementById('stage');
-    if (stageEl && stageWrapper) {
-      // Usar o tamanho interno disponível do wrapper (considera padding)
-      const availableWidth = stageWrapper.clientWidth;
-      const availableHeight = stageWrapper.clientHeight;
-      const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
-      const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
-      const scaledWidth = BASE_WIDTH * scale;
-      const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
-      stageEl.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
-    }
-    // Escala dinâmica para a tela inicial
-    const paginaInicial = document.getElementById('pagina-inicial');
-    if (paginaInicial && stageWrapper) {
-      const availableWidth = stageWrapper.clientWidth;
-      const availableHeight = stageWrapper.clientHeight;
-      const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
-      const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
-      const scaledWidth = BASE_WIDTH * scale;
-      const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
-      paginaInicial.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
-      paginaInicial.style.transformOrigin = 'top left';
-    }
+// Evento para somar 10 pontos ao clicar na mensagem de acerto
+window.addEventListener('DOMContentLoaded', function () {
+  const mensagemLivro = document.getElementById('mensagem-livro-escolhido');
+  if (mensagemLivro) {
+    mensagemLivro.style.cursor = 'pointer';
+    let clicado = false;
+    mensagemLivro.addEventListener('click', function handler() {
+      if (clicado) return;
+      clicado = true;
+      mensagemLivro.classList.add('clicado');
+      const nomeEscolhido = document.getElementById('nome-livro-escolhido');
+      const nomeUltimo = document.getElementById('nome-ultimo-livro');
+      if (!nomeEscolhido || !nomeUltimo) return;
+      const nome1 = (nomeEscolhido.textContent || '').trim().toUpperCase();
+      const nome2 = (nomeUltimo.textContent || '').trim().toUpperCase();
+      if (nome1 && nome2 && nome1 === nome2) {
+        const pontuacaoFinalElemento = document.getElementById('mostra-pontuacao-final');
+        if (pontuacaoFinalElemento) {
+          let valor = parseFloat(pontuacaoFinalElemento.textContent.replace(',', '.')) || 0;
+          console.log('[Antes do acréscimo] Pontuação atual:', valor);
+          valor += 1.00;
+          pontuacaoFinalElemento.textContent = valor.toFixed(2).replace('.', ',');
+          console.log('[Depois do acréscimo] Nova pontuação:', valor.toFixed(2));
+        }
+      }
+      mensagemLivro.innerHTML = 'Veja abaixo sua pontuação.';
+      setTimeout(() => {
+        mensagemLivro.style.transition = 'opacity 1s';
+        mensagemLivro.style.opacity = '0';
+        setTimeout(() => {
+          mensagemLivro.style.display = 'none';
+        }, 1000);
+      }, 5000);
+      mensagemLivro.removeEventListener('click', handler);
+    });
   }
-  window.addEventListener('resize', scaleStage);
-  window.addEventListener('DOMContentLoaded', scaleStage);
-})();
+});
 
 // Variável global para rastrear o elemento sendo arrastado
 let currentDraggedElement = null;
@@ -180,39 +117,9 @@ function embaralharLivros() {
   books.forEach(book => draggableDiv.appendChild(book));
 }
 
-// Proportional scaling of the entire game area
-// Proportional scaling of the game base only
-(function escalaDinamicaGameBase() {
-  const BASE_WIDTH = 750;
-  const BASE_HEIGHT = 850;
-  const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
-  function scaleStageGameBase() {
-    // Desativa escala dinâmica em telas pequenas
-    if (window.innerWidth <= 480) {
-      const stageEl = document.getElementById('game-base');
-      const paginaInicial = document.getElementById('pagina-inicial');
-      if (stageEl) stageEl.style.transform = '';
-      if (paginaInicial) paginaInicial.style.transform = '';
-      return;
-    }
-    const stageEl = document.getElementById('game-base');
-    const stageWrapper = document.getElementById('stage');
-    if (!stageEl || !stageWrapper) return;
-    // Usar o tamanho interno disponível do wrapper (considera padding)
-    const availableWidth = stageWrapper.clientWidth;
-    const availableHeight = stageWrapper.clientHeight;
-    const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
-    const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
-    const scaledWidth = BASE_WIDTH * scale;
-    const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
-    stageEl.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
-  }
-  window.addEventListener('resize', scaleStageGameBase);
-  window.addEventListener('DOMContentLoaded', scaleStageGameBase);
-})();
-
 // Instanciar cronômetro
 const cronometro = new Cronometro();
+
 // Embaralhar livros na entrada da página
 window.addEventListener('DOMContentLoaded', function () {
   embaralharLivros();
@@ -261,16 +168,14 @@ function dragStart(event) {
 
   currentDraggedElement = img; // Armazena referência global
   // Garante que temos um id para o drop usar
-  if (img && img.id) { // se imagem e id existirem ...
-    event.dataTransfer.setData("text/plain", img.id); // define o id da imagem como dado de transferência
+  if (img && img.id) {
+    event.dataTransfer.setData("text/plain", img.id);
   }
-  // Permite movimentação e registra o elemento pai de origem para possíveis trocas
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = 'move';
   }
   img._sourceParent = img.parentElement;
-  img._dropSuccessful = false; // Inicializa flag de drop bem-sucedido
-  // Ocultar a imagem original durante o arraste
+  img._dropSuccessful = false;
   img.style.opacity = '0';
 
   // 1) criar um helper visual que segue o cursor
@@ -285,13 +190,22 @@ function dragStart(event) {
   helper.style.zIndex = '2147483647';
   helper.style.opacity = '1';
   helper.style.transformOrigin = 'center center';
+
+  // Em telas grandes, igualar o tamanho do helper ao da imagem original
+  if (window.innerWidth > 748) {
+    helper.style.width = img.offsetWidth + 'px';
+    helper.style.height = img.offsetHeight + 'px';
+  }
+
   document.body.appendChild(helper);
-  const ghostW = 32;
-  const ghostH = 77;
-  const offsetX = ghostW * 0.5; // hotspot centralizado
+
+  // Calcular o tamanho real do helper após aplicar o CSS ou ajuste manual
+  const ghostW = helper.offsetWidth;
+  const ghostH = helper.offsetHeight;
+  const offsetX = ghostW * 0.5;
   const offsetY = ghostH * 0.5;
+
   const onDragMove = (e) => {
-    // Parar de mover se o drop foi bem-sucedido
     if (img._dropSuccessful || !helper.parentNode) return;
     helper.style.left = (e.clientX - offsetX) + 'px';
     helper.style.top = (e.clientY - offsetY) + 'px';
@@ -645,86 +559,7 @@ function verificarFimDeJogo() {  // Verificar se todos os livros foram dropados 
   }
 }
 
-function fimDeJogo() {
-  cronometro.pararCronometro();   // Parar cronômetro
-  pontuacaoFinal(); // Chamar função pontuacaoFinal
-  acrescerPontuacaoTempo();
-  function acrescerPontuacaoTempo() {
-    // 1. Pegar número do indicador (ou marca-pontuacao)
-    let indicadorNum = 0;
-    const indicadorElemento = document.getElementById("indicador");
-    if (indicadorElemento) {
-      indicadorNum = parseFloat(indicadorElemento.textContent.replace(',', '.')) || 0;
-    } else {
-      // Tentar pegar de marca-pontuacao se não achar indicador
-      const marcaPontuacao = document.getElementById("marca-pontuacao");
-      if (marcaPontuacao) {
-        indicadorNum = parseFloat(marcaPontuacao.textContent.replace(',', '.')) || 0;
-      }
-    }
 
-    // 2. Pegar número do cronômetro e transformar em m,ss (float)
-    let tempoStr = cronometro.pegaRelogio();
-    let tempoFloat = 0;
-    if (tempoStr) {
-      let partes = tempoStr.split(":");
-      if (partes.length === 2) {
-        // mm:ss
-        let min = parseInt(partes[0], 10);
-        let seg = parseInt(partes[1], 10);
-        tempoFloat = parseFloat(min + "." + (seg < 10 ? "0" + seg : seg));
-      } else if (partes.length === 3) {
-        // hh:mm:ss (ignorar horas, usar só mm:ss)
-        let min = parseInt(partes[1], 10);
-        let seg = parseInt(partes[2], 10);
-        tempoFloat = parseFloat(min + "." + (seg < 10 ? "0" + seg : seg));
-      }
-    }
-
-    // 3. Subtrair tempoFloat de indicadorNum
-    let resultado = +(indicadorNum - tempoFloat).toFixed(2);
-
-    // Log explicando a operação matemática
-    console.log(
-      `[Pontuação Tempo] indicador: ${indicadorNum}, tempo (m,ss): ${tempoFloat}, operação: ${indicadorNum} - ${tempoFloat} = ${resultado}`
-    );
-
-    // Transferir resultado para mostra-pontuacao-final
-    const pontuacaoFinalElemento = document.getElementById("mostra-pontuacao-final");
-    if (pontuacaoFinalElemento) {
-      pontuacaoFinalElemento.textContent = resultado;
-    }
-  }
-
-  const tempoFinalElemento = document.getElementById('mostra-tempo-final');
-  if (tempoFinalElemento) {
-    tempoFinalElemento.textContent = cronometro.pegaRelogio();
-  }
-
-  const mensagemFinal = document.getElementById('mensagem-final'); // Seleciona a div da mensagem final
-  if (mensagemFinal) { // Se a div existir ...
-    mensagemFinal.style.display = 'grid'; // Exibe a mensagem final (grid para centralizar)
-    mensagemFinal.style.opacity = '1';
-
-    setTimeout(function () {  // Após 5 segundos, aplicar efeito piscante e mostrar mensagem de acerto/erro
-      verificarSeAcertouLivro();  // Chamar a função de verificação e mostrar mensagem
-
-      const livroEscolhido = document.getElementById('livro-escolhido'); // Seleciona a div do livro escolhido
-      const ultimoLivro = document.getElementById('ultimo-livro'); // Seleciona a div do último livro sorteado
-      const mensagemLivro = document.getElementById('mensagem-livro-escolhido'); // Seleciona a div da mensagem de acerto/erro
-      if (livroEscolhido) livroEscolhido.classList.add('efeito-pisca'); // Aplica classe de efeito piscante no livro escolhido
-      if (ultimoLivro) ultimoLivro.classList.add('efeito-pisca'); // Aplica classe de efeito piscante no último livro sorteado
-      if (mensagemLivro) mensagemLivro.classList.add('efeito-pisca'); // Aplica classe de efeito piscante na mensagem de acerto/erro
-
-      // Remover o efeito após 3 segundos
-      setTimeout(function () {
-        if (livroEscolhido) livroEscolhido.classList.remove('efeito-pisca');
-        if (ultimoLivro) ultimoLivro.classList.remove('efeito-pisca');
-        if (mensagemLivro) mensagemLivro.classList.remove('efeito-pisca');
-      }, 5000); // Duração total do efeito piscante (2 segundos)
-    }, 1500); // Aguardar 1.5 segundos antes de iniciar o efeito piscante
-  }
-}
 
 // Função para ir para a próxima fase
 function vaiParaProximaFase() {
@@ -732,8 +567,24 @@ function vaiParaProximaFase() {
 }
 
 // Função para sair do jogo
+
 function sairDoJogo() {
   window.close();
+}
+
+// Função para verificar se acertou o livro (relacionada ao final do jogo)
+function verificarSeAcertouLivro() {
+  const nomeEscolhido = document.getElementById('nome-livro-escolhido');
+  const nomeUltimo = document.getElementById('nome-ultimo-livro');
+  const mensagemDiv = document.getElementById('mensagem-livro-escolhido');
+  if (!nomeEscolhido || !nomeUltimo || !mensagemDiv) return;
+  const nome1 = (nomeEscolhido.textContent || '').trim().toUpperCase();
+  const nome2 = (nomeUltimo.textContent || '').trim().toUpperCase();
+  if (nome1 && nome2 && nome1 === nome2) {
+    mensagemDiv.innerHTML = 'PARABÉNS VOCÊ ACERTOU<br>CLIQUE AQUI PARA GANHAR UNS PONTOS EXTRAS.';
+  } else {
+    mensagemDiv.innerHTML = 'Você não acertou o livro.<br>Veja abaixo sua pontuação.';
+  }
 }
 
 // Adicionar evento click aos botões
@@ -748,3 +599,77 @@ window.addEventListener('DOMContentLoaded', function () {
     botaoSairJogoFinalizado.addEventListener('click', sairDoJogo);
   }
 });
+
+// Função para dimensionamento proporcional de toda a área de jogo
+(function escalaDinamicaPagina() {
+  const BASE_WIDTH = 750;
+  const BASE_HEIGHT = 850;
+  const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
+  function scaleStage() {
+    // Desativa escala dinâmica em telas pequenas
+    if (window.innerWidth <= 480) {
+      const stageEl = document.getElementById('game-base');
+      const paginaInicial = document.getElementById('pagina-inicial');
+      if (stageEl) stageEl.style.transform = '';
+      if (paginaInicial) paginaInicial.style.transform = '';
+      return;
+    }
+    const stageEl = document.getElementById('game-base');
+    const stageWrapper = document.getElementById('stage');
+    if (stageEl && stageWrapper) {
+      // Usar o tamanho interno disponível do wrapper (considera padding)
+      const availableWidth = stageWrapper.clientWidth;
+      const availableHeight = stageWrapper.clientHeight;
+      const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
+      const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
+      const scaledWidth = BASE_WIDTH * scale;
+      const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
+      stageEl.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
+    }
+    // Escala dinâmica para a tela inicial
+    const paginaInicial = document.getElementById('pagina-inicial');
+    if (paginaInicial && stageWrapper) {
+      const availableWidth = stageWrapper.clientWidth;
+      const availableHeight = stageWrapper.clientHeight;
+      const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
+      const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
+      const scaledWidth = BASE_WIDTH * scale;
+      const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
+      paginaInicial.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
+      paginaInicial.style.transformOrigin = 'top left';
+    }
+  }
+  window.addEventListener('resize', scaleStage);
+  window.addEventListener('DOMContentLoaded', scaleStage);
+})();
+
+// Proportional scaling of the entire game area
+// Proportional scaling of the game base only
+(function escalaDinamicaGameBase() {
+  const BASE_WIDTH = 750;
+  const BASE_HEIGHT = 850;
+  const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
+  function scaleStageGameBase() {
+    // Desativa escala dinâmica em telas pequenas
+    if (window.innerWidth <= 480) {
+      const stageEl = document.getElementById('game-base');
+      const paginaInicial = document.getElementById('pagina-inicial');
+      if (stageEl) stageEl.style.transform = '';
+      if (paginaInicial) paginaInicial.style.transform = '';
+      return;
+    }
+    const stageEl = document.getElementById('game-base');
+    const stageWrapper = document.getElementById('stage');
+    if (!stageEl || !stageWrapper) return;
+    // Usar o tamanho interno disponível do wrapper (considera padding)
+    const availableWidth = stageWrapper.clientWidth;
+    const availableHeight = stageWrapper.clientHeight;
+    const scaleW = Math.min(availableWidth, MAX_VISUAL_WIDTH) / BASE_WIDTH;
+    const scale = Math.min(scaleW, availableHeight / BASE_HEIGHT);
+    const scaledWidth = BASE_WIDTH * scale;
+    const offsetX = Math.max(0, (availableWidth - scaledWidth) / 2);
+    stageEl.style.transform = `translate(${offsetX}px, 0) scale(${scale})`;
+  }
+  window.addEventListener('resize', scaleStageGameBase);
+  window.addEventListener('DOMContentLoaded', scaleStageGameBase);
+})();
