@@ -191,19 +191,18 @@ function dragStart(event) {
   helper.style.opacity = '1';
   helper.style.transformOrigin = 'center center';
 
-  // Em telas grandes, igualar o tamanho do helper ao da imagem original
-  if (window.innerWidth > 748) {
-    helper.style.width = img.offsetWidth + 'px';
-    helper.style.height = img.offsetHeight + 'px';
-  }
+  // if (window.innerWidth > 748) {
+  //   helper.style.width = img.offsetWidth + 'px';
+  //   helper.style.height = img.offsetHeight + 'px'; 
+  // }
 
   document.body.appendChild(helper);
 
   // Calcular o tamanho real do helper após aplicar o CSS ou ajuste manual
-  const ghostW = helper.offsetWidth;
-  const ghostH = helper.offsetHeight;
-  const offsetX = ghostW * 0.5;
-  const offsetY = ghostH * 0.5;
+  const ghostW = helper.offsetWidth; // Largura real do helper
+  const ghostH = helper.offsetHeight; // Altura real do helper
+  const offsetX = ghostW * 0.5; // Centralizar o cursor horizontalmente
+  const offsetY = ghostH * 0.5; // Centralizar o cursor verticalmente
 
   const onDragMove = (e) => {
     if (img._dropSuccessful || !helper.parentNode) return;
@@ -216,8 +215,8 @@ function dragStart(event) {
   // 2) ocultar o ghost nativo usando um canvas transparente 1x1
   if (event.dataTransfer && event.dataTransfer.setDragImage) {
     const blank = document.createElement('canvas');
-    blank.width = 1;
-    blank.height = 1;
+    blank.width = 1; // Tamanho mínimo para evitar que o ghost nativo apareça
+    blank.height = 1; // Tamanho mínimo para evitar que o ghost nativo apareça
     event.dataTransfer.setDragImage(blank, 0, 0);
   }
 }
@@ -282,16 +281,22 @@ function setupDropZones() {
       e.preventDefault();
       if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
       box.classList.add('droppable-hover');
+      // Aumenta o tamanho da box em 10%
+      box.style.transform = 'scale(1.1)';
     });
 
     box.addEventListener('dragenter', () => {
       if (box.classList.contains('locked-drop')) return;
       box.classList.add('droppable-hover');
+      // Aumenta o tamanho da box em 10%
+      box.style.transform = 'scale(1.1)';
     });
 
     box.addEventListener('dragleave', () => {
       if (box.classList.contains('locked-drop')) return;
       box.classList.remove('droppable-hover');
+      // Restaura o tamanho original
+      box.style.transform = '';
     });
 
     box.addEventListener('drop', (e) => {
@@ -299,6 +304,8 @@ function setupDropZones() {
       if (box.classList.contains('locked-drop')) return;
       e.preventDefault();
       box.classList.remove('droppable-hover');
+      // Restaura o tamanho original
+      box.style.transform = '';
       const id = e.dataTransfer ? e.dataTransfer.getData('text/plain') : null;
       if (!id) return;
       const dragged = document.getElementById(id);
@@ -559,7 +566,88 @@ function verificarFimDeJogo() {  // Verificar se todos os livros foram dropados 
   }
 }
 
+function fimDeJogo() {
+  cronometro.pararCronometro();
+  pontuacaoFinal();
 
+  acrescerPontuacaoTempo();
+  function acrescerPontuacaoTempo() {
+    // 1. Pegar número do indicador (ou marca-pontuacao)
+    let indicadorNum = 0;
+    const indicadorElemento = document.getElementById("indicador");
+    if (indicadorElemento) {
+      indicadorNum = parseFloat(indicadorElemento.textContent.replace(',', '.')) || 0;
+    } else {
+      // Tentar pegar de marca-pontuacao se não achar indicador
+      const marcaPontuacao = document.getElementById("marca-pontuacao");
+      if (marcaPontuacao) {
+        indicadorNum = parseFloat(marcaPontuacao.textContent.replace(',', '.')) || 0;
+      }
+    }
+
+    // 2. Pegar número do cronômetro e transformar em m,ss (float)
+    let tempoStr = cronometro.pegaRelogio();
+    let tempoFloat = 0;
+    if (tempoStr) {
+      let partes = tempoStr.split(":");
+      if (partes.length === 2) {
+        // mm:ss
+        let min = parseInt(partes[0], 10);
+        let seg = parseInt(partes[1], 10);
+        tempoFloat = parseFloat(min + "." + (seg < 10 ? "0" + seg : seg));
+      } else if (partes.length === 3) {
+        // hh:mm:ss (ignorar horas, usar só mm:ss)
+        let min = parseInt(partes[1], 10);
+        let seg = parseInt(partes[2], 10);
+        tempoFloat = parseFloat(min + "." + (seg < 10 ? "0" + seg : seg));
+      }
+    }
+
+    // 3. Subtrair tempoFloat de indicadorNum
+    let resultado = +(indicadorNum - tempoFloat).toFixed(2);
+
+    // Log explicando a operação matemática
+    console.log(
+      `[Pontuação Tempo] indicador: ${indicadorNum}, tempo (m,ss): ${tempoFloat}, operação: ${indicadorNum} - ${tempoFloat} = ${resultado}`
+    );
+
+    // Transferir resultado para mostra-pontuacao-final
+    const pontuacaoFinalElemento = document.getElementById("mostra-pontuacao-final");
+    if (pontuacaoFinalElemento) {
+      pontuacaoFinalElemento.textContent = resultado;
+    }
+  }
+  
+  const tempoFinalElemento = document.getElementById('mostra-tempo-final');
+  if (tempoFinalElemento) {
+    tempoFinalElemento.textContent = cronometro.pegaRelogio();
+  }
+
+  // Fazer aparecer "mensagem-final"
+  const mensagemFinal = document.getElementById('mensagem-final');
+  if (mensagemFinal) {
+    mensagemFinal.style.display = 'grid';
+    mensagemFinal.style.opacity = '1';
+    setTimeout(function () {  // Após 5 segundos, aplicar efeito piscante e mostrar mensagem de acerto/erro
+      verificarSeAcertouLivro();  // Chamar a função de verificação e mostrar mensagem
+
+      const livroEscolhido = document.getElementById('livro-escolhido'); // Seleciona a div do livro escolhido
+      const ultimoLivro = document.getElementById('ultimo-livro'); // Seleciona a div do último livro sorteado
+      const mensagemLivro = document.getElementById('mensagem-livro-escolhido'); // Seleciona a div da mensagem de acerto/erro
+      if (mensagemLivro) mensagemLivro.style.display = 'flex'; // Exibe a mensagem com display flex
+      if (livroEscolhido) livroEscolhido.classList.add('efeito-pisca'); // Aplica classe de efeito piscante no livro escolhido
+      if (ultimoLivro) ultimoLivro.classList.add('efeito-pisca'); // Aplica classe de efeito piscante no último livro sorteado
+      if (mensagemLivro) mensagemLivro.classList.add('efeito-pisca'); // Aplica classe de efeito piscante na mensagem de acerto/erro
+
+      // Remover o efeito após 3 segundos
+      setTimeout(function () {
+        if (livroEscolhido) livroEscolhido.classList.remove('efeito-pisca');
+        if (ultimoLivro) ultimoLivro.classList.remove('efeito-pisca');
+        if (mensagemLivro) mensagemLivro.classList.remove('efeito-pisca');
+      }, 5000); // Duração total do efeito piscante (2 segundos)
+    }, 1500); // Aguardar 1.5 segundos antes de iniciar o efeito piscante
+  }
+}
 
 // Função para ir para a próxima fase
 function vaiParaProximaFase() {
@@ -602,12 +690,12 @@ window.addEventListener('DOMContentLoaded', function () {
 
 // Função para dimensionamento proporcional de toda a área de jogo
 (function escalaDinamicaPagina() {
-  const BASE_WIDTH = 750;
-  const BASE_HEIGHT = 850;
+  const BASE_WIDTH = 750; // largura base para calcular escala proporcional, pode ser ajustada conforme o design original do jogo
+  const BASE_HEIGHT = 850; // altura base para calcular escala proporcional, pode ser ajustada conforme o design original do jogo
   const MAX_VISUAL_WIDTH = 800; // limita a largura visual máxima
   function scaleStage() {
-    // Desativa escala dinâmica em telas pequenas
-    if (window.innerWidth <= 480) {
+    // Desativa escala dinâmica em telas pequenas ou baixas
+    if (window.innerWidth <= 450 || window.innerHeight <= 750) {
       const stageEl = document.getElementById('game-base');
       const paginaInicial = document.getElementById('pagina-inicial');
       if (stageEl) stageEl.style.transform = '';

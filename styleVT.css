@@ -21,17 +21,17 @@ body {
     align-items: start;
     justify-items: start;
     overflow: hidden;
-    padding-top: 2%;
     height: 100vh;
     max-height: 100vh;
 }
 
 #pagina-inicial {
     display: grid;
-    grid-template-rows: 200px 230px 280px 140px;
+    grid-template-rows: 22% 25% 31% 22%;
     grid-template-columns: 1fr 1fr;
     width: 750px;
-    height: 850px;
+    height: 100vh;
+    max-height: 900px;
     background-color: #9f854b;
     position: relative;
     transform-origin: top left;
@@ -56,7 +56,7 @@ h3 {
     font-style: italic;
 }
 
-p {
+#p-principal {
     grid-area: 3 / 1 / span 1 / span 2;
     font-family: "Palatino Linotype", serif;
     font-size: 20px;
@@ -64,6 +64,10 @@ p {
     font-style: italic;
     text-align: center;
     padding: 5% 9%;
+}
+
+#p-opcional {
+    display: none;
 }
 
 #selecionar-opcoes {
@@ -98,8 +102,10 @@ p {
 }
 
 .livro-escolhido-da-lista-de-opcoes {
-    height: 33%;
+    height: auto;
     display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -350,6 +356,11 @@ h5 {
 #boxapocrifo7 {
     border: solid 2px black;
     box-shadow: #1f1b11 2px 2px 5px;
+}
+
+.ghost-helper {
+    width: 36px !important;
+    height: 88px !important;
 }
 
 #Marcatempo {
@@ -633,4 +644,8 @@ h5 {
     to {
         filter: brightness(2.5);
     }
+}
+
+#landscape-warning {
+    display: none;
 }
