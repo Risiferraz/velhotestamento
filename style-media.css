@@ -1,95 +1,106 @@
-/* 1) - COR VERMELHA - TELAS COM ALTURA MENOR OU IGUAL A 780PX */
+/* 1) - COR VERDE - TELAS COM ALTURA MENOR OU IGUAL A 750PX */
 
-@media screen and (max-width: 480px) and (max-height: 580px) {
+@media screen and (max-height: 750px) {
     #pagina-inicial {
-        background-color: #dd0f0f;
-    }
-
-    #pagina1 {
-        grid-template-rows: 25vh 6vh 51vh 18vh;
+        margin: 0 auto;
+        background-color: green;
+        grid-template-rows: 21% 31% 33% 15%;
     }
 
     header {
-        font-size: 37px;
-        padding: 5% 4%;
+        padding: 4% 8%;
     }
 
-    p {
-        padding: 6% 5%;
-    }
-
-}
-
-
-/* 1) - VERDE FLUORESCENTE - Smartphones - telas de 641 até 750px */
-@media screen and (max-width: 750px) {
-
-    .ghost-helper {
-        width: 34px;
-        height: 79px;
-    }
-}
-
-/* 2) - AZUL REAL - Smartphones - telas de 481 até 640px */
-@media screen and (max-width: 640px) {
-
-    .ghost-helper {
-        width: 27px;
-        height: 59px;
-    }
-}
-
-/* 3) - VINHO - Smartphones - telas de 376 até 480px e altura acima de 913px */
-@media screen and (max-width: 480px) {
-    #stage {
-        padding-top: 0;
-    }
-
-    #pagina-inicial {
-        grid-template-rows: 19vh 31vh 37vh 13vh;
-        width: 100vw;
-        height: 100vh;
-    }
-
-    header {
-        font-size: 38px;
-        padding: 3% 8%;
-    }
-
-    h3 {
-        font-size: 18px;
-        padding: 2%;
-    }
-
-    p {
-        font-size: 18px;
-        padding: 3% 7%;
-        line-height: 1.4rem;
+    #p-principal {
+        padding: 2% 9%;
     }
 
     #selecionar-opcoes {
-        font-size: 19px;
-        width: 35vw;
-        height: 8vh;
-    }
-
-    .lista-de-opcoes {
-        width: 42vw;
+        font-size: 20px;
+        width: 40%;
     }
 
     #start {
         font-size: 20px;
-        width: 35vw;
-        height: 8vh;
+        width: 40%;
+    }
+}
+
+/* 2) - COR VERMELHA - TELAS COM  LARGURA DE 376 A 479PX */
+
+@media screen and (max-width: 479px) {
+
+    #pagina-inicial {
+        background-color: #dd0f0f;
+        grid-template-rows: repeat(4, auto);
+        width: 100%;
+        height: 100vh;
+        overflow-y: auto;
     }
 
-    .opcoes {
-        font-size: 17px;
+    header {
+        font-size: 38px;
+        padding: 5% 8% 0 8%;
+    }
+
+    h3 {
+        font-size: 18px;
+        padding: 0%;
+        margin: 0 10%;
+    }
+
+    #p-principal {
+        padding: 4% 7% 0 7%;
+        line-height: 1.5rem;
+        font-size: 18px;
+    }
+
+    #selecionar-opcoes {
+        font-size: 18px;
     }
 
     .livro-escolhido-da-lista-de-opcoes {
-        height: 5vh;
-        align-items: center;
+        width: 80%;
+        padding: 0px;
+    }
+
+    .opcoes {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    #start {
+        font-size: 18px;
+    }
+
+    .container {
+        grid-template-rows: 61vh 6vh 10vh 10vh 12vh;
+        grid-template-columns: 35vw 39vw 26vw;
+    }
+
+    .estante {
+        grid-template-rows: 155px 76px 75px 76px 75px;
+    }
+
+    .boxapocrifos {
+        width: 70px;
+        height: 28px;
+    }
+
+    #mensagem-final {
+        grid-template-rows: 7% 10% 12% 10% auto;
+    }
+
+    #proxima-fase {
+        width: 90px;
+        left: 13%;
+        bottom: 60%;
+    }
+
+    #sair-jogo-finalizado {
+        width: 90px;
+        right: 13%;
+        bottom: 60%;
     }
 
     /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.- */
@@ -98,6 +109,7 @@
         grid-template-rows: 60vh 6vh 12vh 9vh 13vh;
         width: 100vw;
         height: 100vh;
+        background-color: #dd0f0f;
     }
 
     .estante {
@@ -175,8 +187,8 @@
     }
 
     .ghost-helper {
-        width: 30px;
-        height: 62px;
+        width: 30px !important;
+        height: 67px !important;
     }
 
     #livrosapocrifos {
@@ -221,6 +233,11 @@
         height: 16px;
     }
 
+    h5 {
+        font-size: 8px;
+        height: 12px;
+    }
+
     #mensagem-de-erro {
         width: 90%;
         bottom: 0;
@@ -241,11 +258,6 @@
         background-size: 110%;
         width: 100vw;
         height: 100vh;
-    }
-
-    h5 {
-        font-size: 8px;
-        height: 12px;
     }
 
     #livro-escolhido {
@@ -310,416 +322,230 @@
 }
 
 
-/* 4) - PÚRPURA -Smartphones - telas com largura de 376 até 480px e altura de 883px até 896px */
-@media (max-width: 480px) and (max-height: 896px) {
+/* 3) - COR VERDE - TELAS COM  LARGURA DE 376 A 479PX E ALTURA MENOR OU IGUAL A 890PX */
+
+@media screen and (max-width: 479px) and (max-height: 890px) {
     #pagina-inicial {
-        grid-template-rows: 18vh 31vh 39vh 12vh;
-    }
-
-    header {
-        font-size: 33px;
-    }
-
-    h3 {
-        font-size: 18px;
-        padding: 0%;
-    }
-
-    p {
-        padding: 3% 5%;
-        line-height: 1.3rem;
-    }
-
-    #selecionar-opcoes {
-        font-size: 18px;
+        background-color: #34823d;
     }
 
     .container {
-        grid-template-rows: 61vh 6vh 10vh 10vh 12vh;
-        grid-template-columns: 35vw 39vw 26vw;
+        grid-template-rows: 63vh 5vh 10vh 10vh 12vh;
+        grid-template-columns: 36vw 40vw 24vw;
+        background-color: #34823d;
     }
 
     .estante {
-        grid-template-rows: 155px 76px 75px 76px 75px;
-    }
-
-    .boxapocrifos {
-        width: 70px;
-        height: 28px;
-    }
-
-    #mensagem-final {
-        grid-template-rows: 7% 10% 12% 10% auto;
-    }
-
-    #proxima-fase {
-        width: 90px;
-        left: 13%;
-        bottom: 60%;
-    }
-
-    #sair-jogo-finalizado {
-        width: 90px;
-        right: 13%;
-        bottom: 60%;
-    }
-}
-
-/* 5) ROSYBROWN - Smartphones - telas com largura de 376 até 480px e altura de até 882px */
-@media screen and (max-width: 480px) {
-    #pagina-inicial {
-        grid-template-rows: 22vh 6vh 53vh 18vh;
-    }
-
-    header {
-        font-size: 38px;
-        padding: 7% 4%;
-    }
-
-    h3 {
-        display: none;
-    }
-
-    p {
-        padding: 3% 5%;
-        line-height: 1.4rem;
-    }
-
-    #selecionar-opcoes {
-        height: 12vh;
-    }
-
-    .livro-escolhido-da-lista-de-opcoes {
-        height: 6vh;
-    }
-
-    #start {
-        height: 12vh;
-    }
-
-    .container {
-        grid-template-rows: 64vh 11vh 10vh 15vh 0;
+        margin: -4% auto;
     }
 
     #obs1-media {
-        display: none;
-    }
-
-    #boxdrag {
-        grid-area: 2 / 1 / span 3 / span 1;
-    }
-
-    #livrosapocrifos {
-        grid-area: 2 / 2 / span 3 / span 1;
-    }
-
-    #titulo-apocrifos {
-        margin: 2% 0% 7% 11%;
-    }
-
-    #Marcatempo {
-        grid-area: 2 / 3 / span 1 / span 1;
-    }
-
-    #Marcapontuacao {
-        grid-area: 3 / 3 / span 1 / span 1;
-    }
-
-    #sair-salvar {
-        grid-area: 4 / 3 / span 1 / span 1;
-    }
-
-}
-
-/* 6) - AMARELO - Smartphones - telas com largura de até 375px e altura de até 812px */
-@media (max-width: 375px) and (max-height: 812px) {
-    .container {
-        grid-template-columns: 34vw 42vw 24vw;
-    }
-
-    .estante {
-        grid-template-rows: 131px 75px 74px 71px 72px;
-        background-position: bottom;
-        width: 360px;
-        height: 512px;
-    }
-
-    #pentateuco {
-        width: 275px;
-    }
-
-    #historicos {
-        width: 275px;
-    }
-
-    #poeticos {
-        width: 275px;
-    }
-
-    #pmaiores {
-        width: 275px;
-    }
-
-    #pmenores {
-        width: 275px;
+        margin: 0 1% 0 4%;
     }
 
     #obs2 {
-        margin: 5% 2% 0 4%;
-    }
-
-    .boxapocrifos {
-        width: 65px;
-        height: 26px;
-    }
-
-    #Marcatempo {
-        width: 65px;
-        font-size: 13px;
-    }
-
-    #Marcapontuacao {
-        width: 65px;
-        font-size: 13px;
-    }
-
-    #sair-salvar {
-        font-size: 18px;
-    }
-
-}
-
-/* 7) - ROSÊ - Smartphones - telas com largura de até 375px e altura de até 761px */
-@media (max-width: 375px) and (max-height: 761px) {
-    .container {
-        grid-template-rows: 63vh 8vh 9vh 9vh 11vh;
-        grid-template-columns: 36vw 38vw 26vw;
-    }
-
-    .estante {
-        grid-template-rows: 119px 70px 68px 69px 68px;
-        width: 340px;
-        height: 480px;
-    }
-
-    #pentateuco {
-        width: 260px;
-    }
-
-    #historicos {
-        width: 260px;
-    }
-
-    #poeticos {
-        width: 260px;
-    }
-
-    #pmaiores {
-        width: 260px;
-    }
-
-    #pmenores {
-        width: 260px;
-    }
-
-    #obs1-media {
-        display: grid;
-        grid-area: 2 / 1 / span 1 / span 3;
-    }
-
-    .box {
-        height: 42px;
-    }
-
-    #obs1-media {
-        grid-area: 2 / 1 / span 1 / span 3;
-        font-size: 15px;
-        margin: 1% 1% 0 4%;
-    }
-
-    #obs2 {
-        font-size: 13px;
-        line-height: 1rem;
-        margin: 0% 4% 0 6%;
-    }
-
-    #boxdrag {
-        grid-area: 3 / 1 / span 3 / span 1;
-        position: relative;
-        bottom: 6%;
-    }
-
-    .livro {
-        width: 30px;
-    }
-
-    #titulo-apocrifos {
-        font-size: 13px;
-        line-height: 1rem;
-        margin: 0% 3% 1% 13%;
-    }
-
-    #livrosapocrifos {
-        grid-area: 3 / 2 / span 3 / span 1;
-        position: relative;
-        bottom: 5%;
-    }
-
-    .boxapocrifos {
-        width: 60px;
-        height: 35px;
-        margin-top: 5px;
-    }
-
-    h5 {
-        font-size: 9px;
-        height: 14px;
-    }
-
-    #Marcatempo {
-        grid-area: 3 / 3 / span 1 / span 1;
-        width: 58px;
-        font-size: 12px;
-        height: 52px;
-    }
-
-    #Marcapontuacao {
-        grid-area: 4 / 3 / span 1 / span 1;
-        width: 58px;
-        font-size: 12px;
-        height: 52px;
-    }
-
-    #sair-salvar {
-        grid-area: 5 / 3 / span 1 / span 1;
-        font-size: 14px;
-        width: 58px;
-        height: 60px;
-    }
-
-    #livro-escolhido {
-        width: 88%;
-    }
-
-    #ultimo-livro {
-        width: 88%;
-    }
-
-}
-
-/* 8) - CINZA - Smartphones - telas com largura de até 375px e altura de até 668px */
-@media (max-width: 375px) and (max-height: 668px) {
-
-    .container {
-        grid-template-rows: 70vh 9vh 9vh 12vh 0;
-    }
-
-    .estante {
-        grid-template-rows: 112px 65px 64px 65px 64px;
-        width: 320px;
-        height: 450px;
-    }
-
-    #pentateuco {
-        width: 245px;
-    }
-
-    #historicos {
-        width: 245px;
-    }
-
-    #poeticos {
-        width: 245px;
-    }
-
-    #pmaiores {
-        width: 245px;
-    }
-
-    #pmenores {
-        width: 245px;
-    }
-
-    #obs1-media {
-        display: none;
-    }
-
-    #obs2 {
-        margin: 5% 7%;
-    }
-
-    #boxdrag {
-        grid-area: 2 / 1 / span 3 / span 1;
+        margin: 3% 2% 0 6%;
     }
 
     .draggable {
-        margin: 18% auto;
-    }
-
-    .ghost-helper {
-        width: 26px;
-        height: 58px;
-    }
-
-    .livro {
-        width: 30px;
-    }
-
-    #livrosapocrifos {
-        grid-area: 2 / 2 / span 3 / span 1;
+        margin: 10% auto;
     }
 
     #titulo-apocrifos {
-        margin: 0% 5% 1% 15%;
+        margin: 2% 6% 2% 7%;
     }
 
     .boxapocrifos {
-        margin-top: 2px;
+        width: 67px;
+        height: 26px;
+    }
+}
+
+/* 4) - COR AZUL - TELAS COM ALTURA MENOR OU IGUAL A 780PX */
+
+@media screen and (max-width: 375px) and (max-height: 780px) {
+    #pagina-inicial {
+        background-color: #676fe4;
+        grid-template-rows: 25% 36% 22% 17%;
     }
 
-    h5 {
-        font-size: 9px;
-        height: 14px;
+    header {
+        font-size: 37px;
+        padding: 6% 10% 0 10%;
+    }
+
+    #selecionar-opcoes {
+        font-size: 16px;
+        width: 65%;
+    }
+
+    #start {
+        font-size: 16px;
+        width: 65%;
+    }
+
+    #p-principal {
+        display: none;
+    }
+
+    #p-opcional {
+        display: block;
+        grid-area: 3 / 1 / span 1 / span 2;
+        font-family: "Palatino Linotype", serif;
+        font-size: 18px;
+        line-height: 1.3rem;
+        color: #000000;
+        font-style: italic;
+        text-align: center;
+        padding: 5% 5%;
+    }
+
+    .container {
+        grid-template-rows: 63vh 5vh 11vh 9vh 12vh;
+        grid-template-columns: 36vw 40vw 24vw;
+        background-color: #676fe4;
+    }
+
+    .estante {
+        grid-area: 1 / 1 / span 1 / span 3;
+        grid-template-rows: 143px 69px 69px 68px 68px;
+        width: 340px;
+    }
+
+    #pentateuco {
+        width: 260px;
+    }
+
+    #historicos {
+        width: 260px;
+    }
+
+    #poeticos {
+        width: 260px;
+    }
+
+    #pmaiores {
+        width: 260px;
+    }
+
+    #pmenores {
+        width: 260px;
+    }
+
+    #obs1-media {
+        margin: 2% 1% 0 4%;
+        font-size: 15px;
+
+    }
+
+    #obs2 {
+        font-size: 15px;
+        line-height: 1rem;
+    }
+
+    #titulo-apocrifos {
+        font-size: 15px;
+    }
+
+    .boxapocrifos {
+        width: 65px;
+        height: 23px;
     }
 
     #Marcatempo {
-        grid-area: 2 / 3 / span 1 / span 1;
-        width: 58px;
-        font-size: 12px;
-        height: 52px;
+        width: 68px;
     }
 
     #Marcapontuacao {
-        grid-area: 3 / 3 / span 1 / span 1;
+        width: 68px;
     }
 
     #sair-salvar {
-        grid-area: 4 / 3 / span 1 / span 1;
+        width: 69px;
+        height: 70px;
+        font-size: 17px;
+    }
+}
+
+
+/* 5) - COR ROSYBROWN - TELAS COM LARGURA MENOR OU IGUAL A 375PX E ALTURA MENOR OU IGUAL A 667PX */
+
+@media screen and (max-width: 375px) and (max-height: 670px) {
+    #pagina-inicial {
+        background-color: rosybrown;
     }
 
-    #mensagem-final {
-        grid-template-rows: 2% 8% 13% 9% auto;
-        background-size: 104%;
+    .container {
+        background-color: rosybrown;
+        grid-template-rows: 63vh 1vh 11vh 11vh 14vh;
     }
 
-    #livro-escolhido {
-        width: 85%;
-        font-size: 9px;
+    .estante {
+        grid-template-rows: 120px 59px 59px 59px 57px;
+        width: 290px;
     }
 
-    #ultimo-livro {
-        width: 85%;
-        font-size: 9px;
+    .box {
+        width: 30px;
+        height: 38px;
     }
 
-    #tempo-final {
-        width: 85%;
-        font-size: 15px;
+    #pentateuco {
+        width: 225px;
     }
 
-    #pontuacao-final {
-        width: 85%;
-        font-size: 15px;
+    #historicos {
+        width: 225px;
+    }
+
+    #poeticos {
+        width: 225px;
+    }
+
+    #pmaiores {
+        width: 225px;
+    }
+
+    #pmenores {
+        width: 225px;
+    }
+
+    #obs1-media {
+        display: none;
+    }
+
+    #obs2 {
+        font-size: 13px;
+    }
+
+    .boxapocrifos {
+        width: 53px;
+        height: 20px;
+    }
+
+    .draggable {
+        margin: 0% auto;
+    }
+
+    #titulo-apocrifos {
+        font-size: 13px;
+        line-height: 1rem;
+        margin: 2% 6% 5% 11%;
+    }
+
+    .ghost-helper {
+        width: 25px !important;
+        height: 55px !important;
+    }
+
+    #Marcatempo {
+        width: 65px;
+        font-size: 14px;
+    }
+
+    #Marcapontuacao {
+        width: 65px;
+        font-size: 14px;
     }
 }
 
