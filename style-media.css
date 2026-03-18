@@ -325,9 +325,9 @@
 /* 3) - COR VERDE - TELAS COM  LARGURA DE 376 A 479PX E ALTURA MENOR OU IGUAL A 890PX */
 
 @media screen and (max-width: 479px) and (max-height: 890px) {
-    #pagina-inicial {
-        /* background-color: #34823d; */
-    }
+    /* #pagina-inicial {
+        background-color: #34823d;
+    } */
 
     .container {
         grid-template-rows: 63vh 5vh 10vh 10vh 12vh;
@@ -471,9 +471,9 @@
 /* 5) - COR ROSYBROWN - TELAS COM LARGURA MENOR OU IGUAL A 375PX E ALTURA MENOR OU IGUAL A 667PX */
 
 @media screen and (max-width: 375px) and (max-height: 670px) {
-    #pagina-inicial {
-        /* background-color: rosybrown; */
-    }
+    /* #pagina-inicial {
+        background-color: rosybrown;
+    } */
 
     .container {
         /* background-color: rosybrown; */
