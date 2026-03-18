@@ -3,7 +3,7 @@
 @media screen and (max-height: 750px) {
     #pagina-inicial {
         margin: 0 auto;
-        background-color: green;
+        /* background-color: green; */
         grid-template-rows: 21% 31% 33% 15%;
     }
 
@@ -31,7 +31,7 @@
 @media screen and (max-width: 479px) {
 
     #pagina-inicial {
-        background-color: #dd0f0f;
+        /* background-color: #dd0f0f; */
         grid-template-rows: repeat(4, auto);
         width: 100%;
         height: 100vh;
@@ -109,7 +109,7 @@
         grid-template-rows: 60vh 6vh 12vh 9vh 13vh;
         width: 100vw;
         height: 100vh;
-        background-color: #dd0f0f;
+        /* background-color: #dd0f0f; */
     }
 
     .estante {
@@ -326,13 +326,13 @@
 
 @media screen and (max-width: 479px) and (max-height: 890px) {
     #pagina-inicial {
-        background-color: #34823d;
+        /* background-color: #34823d; */
     }
 
     .container {
         grid-template-rows: 63vh 5vh 10vh 10vh 12vh;
         grid-template-columns: 36vw 40vw 24vw;
-        background-color: #34823d;
+        /* background-color: #34823d; */
     }
 
     .estante {
@@ -365,7 +365,7 @@
 
 @media screen and (max-width: 375px) and (max-height: 780px) {
     #pagina-inicial {
-        background-color: #676fe4;
+        /* background-color: #676fe4; */
         grid-template-rows: 25% 36% 22% 17%;
     }
 
@@ -403,7 +403,7 @@
     .container {
         grid-template-rows: 63vh 5vh 11vh 9vh 12vh;
         grid-template-columns: 36vw 40vw 24vw;
-        background-color: #676fe4;
+        /* background-color: #676fe4; */
     }
 
     .estante {
@@ -472,11 +472,11 @@
 
 @media screen and (max-width: 375px) and (max-height: 670px) {
     #pagina-inicial {
-        background-color: rosybrown;
+        /* background-color: rosybrown; */
     }
 
     .container {
-        background-color: rosybrown;
+        /* background-color: rosybrown; */
         grid-template-rows: 63vh 1vh 11vh 11vh 14vh;
     }
 
