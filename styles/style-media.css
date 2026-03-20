@@ -321,7 +321,6 @@
     }
 }
 
-
 /* 3) - COR VERDE - TELAS COM  LARGURA DE 376 A 479PX E ALTURA MENOR OU IGUAL A 890PX */
 
 @media screen and (max-width: 479px) and (max-height: 890px) {
@@ -466,7 +465,6 @@
         font-size: 17px;
     }
 }
-
 
 /* 5) - COR ROSYBROWN - TELAS COM LARGURA MENOR OU IGUAL A 375PX E ALTURA MENOR OU IGUAL A 667PX */
 
